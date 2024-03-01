@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Farm.Models;
+using Farm.Service.IService;
 
 public class Program
 {
@@ -8,6 +9,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddScoped<IProduceService, ProduceService>();
+        builder.Services.AddScoped<IGardenService, GardenService>();
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();

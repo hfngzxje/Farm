@@ -14,7 +14,7 @@
         {
             var errors = new List<string>();
             if (IsUpdate && ProduceId == null)
-                errors.Add("BookId is required!");
+                errors.Add("Produce Id is required!");
             else if (!IsUpdate)
                 ProduceId = null;
 
