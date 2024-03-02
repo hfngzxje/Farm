@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Farm", "Farm\Farm.csproj", "{DFDA96D8-D50F-4A42-AA28-D986E0A37600}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Farm", "Farm\Farm.csproj", "{DFDA96D8-D50F-4A42-AA28-D986E0A37600}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FarmClients", "FarmClients\FarmClients.csproj", "{9CDAA6BE-216F-41F2-833B-FD2C4A33B8B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{DFDA96D8-D50F-4A42-AA28-D986E0A37600}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFDA96D8-D50F-4A42-AA28-D986E0A37600}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFDA96D8-D50F-4A42-AA28-D986E0A37600}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CDAA6BE-216F-41F2-833B-FD2C4A33B8B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CDAA6BE-216F-41F2-833B-FD2C4A33B8B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CDAA6BE-216F-41F2-833B-FD2C4A33B8B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CDAA6BE-216F-41F2-833B-FD2C4A33B8B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
