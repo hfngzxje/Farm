@@ -1,5 +1,5 @@
 ﻿using Farm.DTOS;
-using Farm.Models;
+using Farm.Modelss;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

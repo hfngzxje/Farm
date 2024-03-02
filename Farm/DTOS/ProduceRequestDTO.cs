@@ -5,6 +5,8 @@
         public int? ProduceId { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
+        public int? Quantity { get; set; }
+        public int? Status { get; set; }
         public DateTime? PlantingDate { get; set; }
         public DateTime? ExpectedHarvestDate { get; set; }
         public DateTime? ActualHarvestDate { get; set; }
@@ -30,6 +32,12 @@
 
             if (PlantingDate == null)
                 errors.Add("PusblishedDate is required!");
+
+            if (Quantity == null)
+                errors.Add("Quantity is required!");
+
+            if (Status == null)
+                errors.Add("Status is required!");
 
             if (ExpectedHarvestDate == null)
                 errors.Add("ExpectedHarvestDate is required!");

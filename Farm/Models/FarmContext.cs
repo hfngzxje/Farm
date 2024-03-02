@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Farm.Models
+namespace Farm.Modelss
 {
     public partial class FarmContext : DbContext
     {
@@ -19,6 +19,7 @@ namespace Farm.Models
         public virtual DbSet<Garden> Gardens { get; set; } = null!;
         public virtual DbSet<History> Histories { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
+        public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
         public virtual DbSet<Process> Processes { get; set; } = null!;
         public virtual DbSet<Produce> Produces { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
@@ -81,20 +82,45 @@ namespace Farm.Models
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+                entity.ToTable("Order");
 
-                entity.Property(e => e.ProduceId).HasColumnName("ProduceID");
+                entity.Property(e => e.OrderId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("OrderID");
 
-                entity.Property(e => e.RequestDate).HasColumnType("date");
+                entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Status)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.Produce)
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.User)
                     .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK__Order__UserID__5441852A");
+            });
+
+            modelBuilder.Entity<OrderDetail>(entity =>
+            {
+                entity.Property(e => e.OrderDetailId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("OrderDetailID");
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.Property(e => e.ProduceId).HasColumnName("ProduceID");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.OrderId)
+                    .HasConstraintName("FK__OrderDeta__Order__571DF1D5");
+
+                entity.HasOne(d => d.Produce)
+                    .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.ProduceId)
-                    .HasConstraintName("FK__Orders__ProduceI__31EC6D26");
+                    .HasConstraintName("FK__OrderDeta__Produ__5812160E");
             });
 
             modelBuilder.Entity<Process>(entity =>

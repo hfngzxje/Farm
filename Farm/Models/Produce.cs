@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Farm.Models
+namespace Farm.Modelss
 {
     public partial class Produce
     {
         public Produce()
         {
             Histories = new HashSet<History>();
-            Orders = new HashSet<Order>();
+            OrderDetails = new HashSet<OrderDetail>();
             Processes = new HashSet<Process>();
         }
 
@@ -19,10 +19,12 @@ namespace Farm.Models
         public DateTime? ExpectedHarvestDate { get; set; }
         public DateTime? ActualHarvestDate { get; set; }
         public int? GardenId { get; set; }
+        public int? Quantity { get; set; }
+        public int? Status { get; set; }
 
         public virtual Garden? Garden { get; set; }
         public virtual ICollection<History> Histories { get; set; }
-        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<Process> Processes { get; set; }
     }
 }

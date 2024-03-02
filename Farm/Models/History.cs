@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Farm.Models
+namespace Farm.Modelss
 {
     public partial class History
     {

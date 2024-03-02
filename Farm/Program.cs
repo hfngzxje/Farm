@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Farm.Models;
+using Farm.Modelss;
 using Farm.Service.IService;
 
 public class Program

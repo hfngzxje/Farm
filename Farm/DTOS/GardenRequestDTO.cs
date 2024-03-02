@@ -1,4 +1,4 @@
-﻿using Farm.Models;
+﻿using Farm.Modelss;
 
 namespace Farm.DTOS
 {

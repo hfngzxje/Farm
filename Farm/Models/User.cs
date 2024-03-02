@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Farm.Models
+namespace Farm.Modelss
 {
     public partial class User
     {
         public User()
         {
             Histories = new HashSet<History>();
+            Orders = new HashSet<Order>();
         }
 
         public int UserId { get; set; }
@@ -19,5 +20,6 @@ namespace Farm.Models
 
         public virtual Role? Role { get; set; }
         public virtual ICollection<History> Histories { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }
