@@ -2,7 +2,6 @@
 {
     public class ProduceRequestDTO
     {
-        public int? ProduceId { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         public int? Quantity { get; set; }
@@ -10,15 +9,13 @@
         public DateTime? PlantingDate { get; set; }
         public DateTime? ExpectedHarvestDate { get; set; }
         public DateTime? ActualHarvestDate { get; set; }
-        public int? GardenId { get; set; }
+		public string? Img { get; set; }
+		public double? Price { get; set; }
+		public int? GardenId { get; set; }
 
         public List<string> ValidateInput(bool IsUpdate)
         {
             var errors = new List<string>();
-            if (IsUpdate && ProduceId == null)
-                errors.Add("Produce Id is required!");
-            else if (!IsUpdate)
-                ProduceId = null;
 
             if (String.IsNullOrEmpty(Name))
                 errors.Add("Title is required!");

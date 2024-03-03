@@ -21,8 +21,10 @@ namespace Farm.Modelss
         public int? GardenId { get; set; }
         public int? Quantity { get; set; }
         public int? Status { get; set; }
+        public string? Img { get; set; }
+        public double? Price { get; set; }
 
-        public virtual Garden? Garden { get; set; }
+		public virtual Garden? Garden { get; set; }
         public virtual ICollection<History> Histories { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<Process> Processes { get; set; }

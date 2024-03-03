@@ -32,7 +32,9 @@ public class ProduceService : IProduceService
             ActualHarvestDate = produceRequest.ActualHarvestDate.Value,
             GardenId = produceRequest.GardenId.Value,
             Quantity = produceRequest.Quantity.Value,
-            Status = produceRequest.Status.Value,   
+            Status = 1,   
+            Img = produceRequest.Img,
+            Price = produceRequest.Price,
         };
 
         _context.Produces.Add(produce);
@@ -101,6 +103,8 @@ public class ProduceService : IProduceService
         existingProduce.GardenId = produceRequest.GardenId.Value;
 		existingProduce.Quantity = produceRequest.Quantity.Value;
 		existingProduce.Status = produceRequest.Status;
+        existingProduce.Img = produceRequest.Img;
+        existingProduce.Price = produceRequest.Price;
 
 
 		_context.SaveChanges();

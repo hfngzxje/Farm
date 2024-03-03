@@ -1,153 +1,12 @@
 ﻿@page
-@{
-	Layout = null;
-}
 @model FarmClients.Pages.Admin.ProduveModel
 @{
+	Layout = "~/Pages/Admin/Shared/_AdminLayout.cshtml";
 }
 
 
-<!doctype html>
 <html lang="en">
-<head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-	<title>crud dashboard</title>
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="~/cssAD/bootstrap.min.css">
-	<!----css3---->
-	<link rel="stylesheet" href="~/cssAD/custom.css">
-
-
-	<!--google fonts -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-
-	<!--google material icon-->
-	<link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
-
-</head>
 <body>
-
-
-
-	<div class="wrapper">
-
-		<div class="body-overlay"></div>
-
-		<!-------sidebar--design------------>
-
-		<div id="sidebar">
-			<div class="sidebar-header">
-				<h3><img src="img/logo.png" class="img-fluid" /><span>vishweb design</span></h3>
-			</div>
-			<ul class="list-unstyled component m-0">
-				<li class="active">
-					<a href="~/Admin/Produce" class="dashboard"><i class="material-icons"></i>Produce </a>
-				</li>
-
-				<li class="active">
-					<a href="~/Admin/Garden" class="dashboard"><i class="material-icons"></i>Garden </a>
-				</li>
-
-			</ul>
-		</div>
-
-		<!-------sidebar--design- close----------->
-		<!-------page-content start----------->
-
-		<div id="content">
-
-			<!------top-navbar-start----------->
-
-			<div class="top-navbar">
-				<div class="xd-topbar">
-					<div class="row">
-						<div class="col-2 col-md-1 col-lg-1 order-2 order-md-1 align-self-center">
-							<div class="xp-menubar">
-								<span class="material-icons text-white">signal_cellular_alt</span>
-							</div>
-						</div>
-
-						<div class="col-md-5 col-lg-3 order-3 order-md-2">
-							<div class="xp-searchbar">
-								<form>
-									<div class="input-group">
-										<input type="search" class="form-control"
-											   placeholder="Search">
-										<div class="input-group-append">
-											<button class="btn" type="submit" id="button-addon2">
-												Go
-											</button>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-
-
-						<div class="col-10 col-md-6 col-lg-8 order-1 order-md-3">
-							<div class="xp-profilebar text-right">
-								<nav class="navbar p-0">
-									<ul class="nav navbar-nav flex-row ml-auto">
-									
-
-										<li class="dropdown nav-item">
-											<a class="nav-link" href="#" data-toggle="dropdown">
-												<img src="img/user.jpg" style="width:40px; border-radius:50%;" />
-												<span class="xp-user-live"></span>
-											</a>
-											<ul class="dropdown-menu small-menu">
-												<li>
-													<a href="#">
-														<span class="material-icons">person_outline</span>
-														Profile
-													</a>
-												</li>
-												<li>
-													<a href="#">
-														<span class="material-icons">settings</span>
-														Settings
-													</a>
-												</li>
-												<li>
-													<a href="#" id="logoutButton">
-														<span class="material-icons">logout</span>
-														Logout
-													</a>
-												</li>
-
-												
-
-											</ul>
-										</li>
-
-
-									</ul>
-								</nav>
-							</div>
-						</div>
-
-					</div>
-
-					<div class="xp-breadcrumbbar text-center">
-						<h4 class="page-title">Dashboard</h4>
-						<ol class="breadcrumb">
-							<li class="breadcrumb-item"><a href="#">Vishweb</a></li>
-							<li class="breadcrumb-item active" aria-curent="page">Dashboard</li>
-						</ol>
-					</div>
-
-
-				</div>
-			</div>
-			<!------top-navbar-end----------->
-			<!------main-content-start----------->
-
 			<div class="main-content">
 				<div class="row">
 					<div class="col-md-12">
@@ -156,12 +15,12 @@
 							<div class="table-title">
 								<div class="row">
 									<div class="col-sm-6 p-0 flex justify-content-lg-start justify-content-center">
-										<h2 class="ml-lg-2">Manage  Employees</h2>
+										<h2 class="ml-lg-2">Manage  Produce</h2>
 									</div>
 									<div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
-										<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal">
+								<a href="#addProduceModal" class="btn btn-success" data-toggle="modal">
 											<i class="material-icons">&#xE147;</i>
-											<span>Add New Employees</span>
+									<span>Add New Produce</span>
 										</a>
 										<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal">
 											<i class="material-icons">&#xE15C;</i>
@@ -171,152 +30,119 @@
 								</div>
 							</div>
 
-							<table class="table table-striped table-hover">
-								<thead>
-									<tr>
-										<th>
-											<span class="custom-checkbox">
-												<input type="checkbox" id="selectAll">
-												<label for="selectAll"></label>
-										</th>
-										<th>Name</th>
-										<th>Email</th>
-										<th>Address</th>
-										<th>Phone</th>
-										<th>Actions</th>
-									</tr>
-								</thead>
+					<table id="employeeTable" class="table table-striped table-hover">
+						<!-- Đầu bảng -->
+						<thead>
+							<tr>
+								<!-- Các cột -->
+								<th>Id</th>
+								<th>Name</th>
+								<th>Description</th>
+								<th>PlantingDate</th>
+								<th>ExpectedHarvestDate</th>
+								<th>ActualHarvestDate</th>
+								<th>Quantity</th>
+								<th>Status</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
 
-								<tbody>
-									<tr>
-										<th>
-											<span class="custom-checkbox">
-												<input type="checkbox" id="checkbox1" name="option[]" value="1">
-												<label for="checkbox1"></label>
-										</th>
-										<th>Thomas Hardy</th>
-										<th>ThomasHardy@gmail.com</th>
-										<th>90r parkdground poland Usa.</th>
-										<th>(78-582552-9)</th>
-										<th>
-											<a href="#editEmployeeModal" class="edit" data-toggle="modal">
-												<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
-											</a>
-											<a href="#deleteEmployeeModal" class="delete" data-toggle="modal">
-												<i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
-											</a>
-										</th>
-									</tr>
+					<style>
+						.status-yellow {
+							background-color: yellow;
+							color: black;
+						}
 
+						.status-green {
+							background-color: green;
+							color: white;
+						}
 
-									<tr>
-										<th>
-											<span class="custom-checkbox">
-												<input type="checkbox" id="checkbox2" name="option[]" value="1">
-												<label for="checkbox2"></label>
-										</th>
-										<th>Dominique Perrier</th>
-										<th>dominiquePerrier@gmail.com</th>
-										<th>90r ser57, Berlin poland Bermany.</th>
-										<th>(78-5235-2-9)</th>
-										<th>
-											<a href="#editEmployeeModal" class="edit" data-toggle="modal">
-												<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
-											</a>
-											<a href="#deleteEmployeeModal" class="delete" data-toggle="modal">
-												<i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
-											</a>
-										</th>
-									</tr>
+						.status-blue {
+							background-color: blue;
+							color: white;
+						}
+
+						.status-red {
+							background-color: red;
+							color: white;
+						}
+					</style>
 
 
-									<tr>
-										<th>
-											<span class="custom-checkbox">
-												<input type="checkbox" id="checkbox3" name="option[]" value="1">
-												<label for="checkbox3"></label>
-										</th>
-										<th>Marai Andres</th>
-										<th>MarariAndres@gmail.com</th>
-										<th>90r ser57, Berlin poland Bermany.</th>
-										<th>(78-239-669)</th>
-										<th>
-											<a href="#edit" class="edit" data-toggle="modal">
-												<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
-											</a>
-											<a href="#deleteEmployeeModal" class="delete" data-toggle="modal">
-												<i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
-											</a>
-										</th>
-									</tr>
+					<script>
+						fetch('https://localhost:7020/api/Produce')
+							.then(response => response.json()) // Chuyển đổi phản hồi sang JSON
+							.then(data => {
+								// Lặp qua từng dòng dữ liệu và thêm vào bảng
+								data.forEach(produce => {
+									const row = `
+										<tr>
+											<td>${produce.produceId}</td>
+											<td>${produce.name}</td>
+											<td>${produce.description}</td>
+											<td>${formatDate(produce.plantingDate)}</td>
+											<td>${formatDate(produce.expectedHarvestDate)}</td>
+											<td>${formatDate(produce.actualHarvestDate)}</td>
+											<td>${produce.quantity}</td>
+											<td>${getStatusText(produce.status)}</td>
 
-									<tr>
-										<th>
-											<span class="custom-checkbox">
-												<input type="checkbox" id="checkbox4" name="option[]" value="1">
-												<label for="checkbox4"></label>
-										</th>
-										<th>Vishweb Design</th>
-										<th>vishwebdesign@gmail.com</th>
-										<th> B-2 ser57 Nodia East Delhi,India.</th>
-										<th>(78-239-669)</th>
-										<th>
-											<a href="#editEmployeeModal" class="edit" data-toggle="modal">
-												<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
-											</a>
-											<a href="#deleteEmployeeModal" class="delete" data-toggle="modal">
-												<i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
-											</a>
-										</th>
-									</tr>
+											<td>
+												<a href="#viewEmployeeDetailsModal" class="view-details" data-toggle="modal">
+													<i class="material-icons" data-toggle="tooltip" title="View Details">visibility</i>
+												</a>
 
-									<tr>
-										<th>
-											<span class="custom-checkbox">
-												<input type="checkbox" id="checkbox5" name="option[]" value="1">
-												<label for="checkbox5"></label>
-										</th>
-										<th>Vishwajeet Kumar</th>
-										<th>vishkumar234@gmail.com</th>
-										<th> B-2 ser57 Nodia East Delhi,India.</th>
-										<th>(78-555-229)</th>
-										<th>
-											<a href="#editEmployeeModal" class="edit" data-toggle="modal">
-												<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
-											</a>
-											<a href="#deleteEmployeeModal" class="delete" data-toggle="modal">
-												<i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
-											</a>
-										</th>
-									</tr>
+												<a href="#editEmployeeModal" class="edit" data-toggle="modal">
+													<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+												</a>
 
-								</tbody>
+												<a href="#deleteEmployeeModal" class="delete" data-toggle="modal">
+													<i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+												</a>
+											</td>
+										</tr>`;
+									document.querySelector('#employeeTable tbody').insertAdjacentHTML('beforeend', row);
+								});
+							})
+							.catch(error => console.error('There was a problem with the fetch operation:', error));
 
+						function formatDate(dateString) {
+							const date = new Date(dateString);
+							const year = date.getFullYear();
+							let month = (date.getMonth() + 1).toString().padStart(2, '0');
+							let day = date.getDate().toString().padStart(2, '0');
+							return `${year}-${month}-${day}`;
+						}
 
-							</table>
+						function getStatusText(status) {
+							switch (status) {
+								case 1:
+									return "<span class='status-yellow'>Taking care</span>";
+								case 2:
+									return "<span class='status-green'>Harvest</span>";
+								case 3:
+									return "<span class='status-blue'>Preserve</span>";
+								case 4:
+									return "<span class='status-red'>Expired</span>";
+								default:
+									return "Unknown";
+							}
+						}
 
-							<div class="clearfix">
-								<div class="hint-text">showing <b>5</b> out of <b>25</b></div>
-								<ul class="pagination">
-									<li class="page-item disabled"><a href="#">Previous</a></li>
-									<li class="page-item "><a href="#" class="page-link">1</a></li>
-									<li class="page-item "><a href="#" class="page-link">2</a></li>
-									<li class="page-item active"><a href="#" class="page-link">3</a></li>
-									<li class="page-item "><a href="#" class="page-link">4</a></li>
-									<li class="page-item "><a href="#" class="page-link">5</a></li>
-									<li class="page-item "><a href="#" class="page-link">Next</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
+					
+
+					</script>
 
 
 					<!----add-modal start--------->
-					<div class="modal fade" tabindex="-1" id="addEmployeeModal" role="dialog">
+					<div class="modal fade" tabindex="-1" id="addProduceModal" role="dialog">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
-									<h5 class="modal-title">Add Employees</h5>
+									<h5 class="modal-title">Add Produce</h5>
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 										<span aria-hidden="true">&times;</span>
 									</button>
@@ -327,16 +153,36 @@
 										<input type="text" class="form-control" required>
 									</div>
 									<div class="form-group">
-										<label>Email</label>
-										<input type="emil" class="form-control" required>
-									</div>
-									<div class="form-group">
-										<label>Address</label>
-										<textarea class="form-control" required></textarea>
-									</div>
-									<div class="form-group">
-										<label>Phone</label>
+										<label>Description</label>
 										<input type="text" class="form-control" required>
+									</div>
+									<div class="form-group">
+										<label>Planting Date</label>
+										<input type="date" class="form-control" required>
+									</div>
+									<div class="form-group">
+										<label>ExpectedHarvest Date</label>
+										<input type="date" class="form-control" required>
+									</div>
+									<div class="form-group">
+										<label>ActualHarvest Date</label>
+										<input type="date" class="form-control">
+									</div>
+									<div class="form-group">
+										<label>GardenID</label>
+										<input type="number" class="form-control" required>
+									</div>
+									<div class="form-group">
+										<label>Quantity</label>
+										<input type="number" class="form-control" required>
+									</div>
+									<div class="form-group">
+										<label>Img</label>
+										<input type="text" class="form-control">
+									</div>
+									<div class="form-group">
+										<label>Price</label>
+										<input type="number" class="form-control" >
 									</div>
 								</div>
 								<div class="modal-footer">
@@ -364,21 +210,45 @@
 										<input type="text" class="form-control" required>
 									</div>
 									<div class="form-group">
-										<label>Email</label>
-										<input type="emil" class="form-control" required>
-									</div>
-									<div class="form-group">
-										<label>Address</label>
-										<textarea class="form-control" required></textarea>
-									</div>
-									<div class="form-group">
-										<label>Phone</label>
+										<label>Description</label>
 										<input type="text" class="form-control" required>
+									</div>
+									<div class="form-group">
+										<label>Planting Date</label>
+										<input type="date" class="form-control" required>
+									</div>
+									<div class="form-group">
+										<label>ExpectedHarvest Date</label>
+										<input type="date" class="form-control" required>
+									</div>
+									<div class="form-group">
+										<label>ActualHarvestDate</label>
+										<input type="date" class="form-control" >
+									</div>
+									<div class="form-group">
+										<label>GardenID</label>
+										<input type="number" class="form-control" required>
+									</div>
+									<div class="form-group">
+										<label>Quantity</label>
+										<input type="number" class="form-control" required>
+									</div>
+									<div class="form-group">
+										<label>Status</label>
+										<input type="number" class="form-control" required>
+									</div>
+									<div class="form-group">
+										<label>Img</label>
+										<input type="text" class="form-control">
+									</div>
+									<div class="form-group">
+										<label>Price</label>
+										<input type="number" class="form-control">
 									</div>
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-									<button type="button" class="btn btn-success">Save</button>
+									<button type="button" class="btn btn-success">Add</button>
 								</div>
 							</div>
 						</div>
@@ -407,37 +277,9 @@
 						</div>
 					</div>
 
-					<!----edit-modal end--------->
-
-
-
-
 				</div>
 			</div>
 
-			<!------main-content-end----------->
-			<!----footer-design------------->
-
-			<footer class="footer">
-				<div class="container-fluid">
-					<div class="footer-in">
-						<p class="mb-0">&copy 2021 Vishweb Design . All Rights Reserved.</p>
-					</div>
-				</div>
-			</footer>
-
-
-
-
-		</div>
-
-	</div>
-
-
-
-	<!-------complete html----------->
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="~/jsAD/jquery-3.3.1.slim.min.js"></script>
 	<script src="~/jsAD/popper.min.js"></script>
 	<script src="~/jsAD/bootstrap.min.js"></script>
@@ -457,28 +299,6 @@
 
 		});
 	</script>
-	<script>
-		$(document).ready(function () {
-			$('#logoutButton').click(function (event) {
-				event.preventDefault();
-				$.ajax({
-					type: 'POST',
-					url: 'https://localhost:7020/api/User/logout',
-					success: function (response) {
-						sessionStorage.clear();
-						window.location.href = 'https://localhost:7155/Clients/Home';
-					},
-					error: function (xhr, status, error) {
-						$('#logoutButton').append('<span class="error-message">Error logging out</span>');
-					}
-				});
-			});
-		});
-	</script>
-
-
-
 
 </body>
-
 </html>

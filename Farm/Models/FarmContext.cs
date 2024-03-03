@@ -169,9 +169,19 @@ namespace Farm.Modelss
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PlantingDate).HasColumnType("date");
+				entity.Property(e => e.Quantity).HasColumnName("Quantity");
 
-                entity.HasOne(d => d.Garden)
+				entity.Property(e => e.Status).HasColumnName("Status");
+
+				entity.Property(e => e.PlantingDate).HasColumnType("date");
+
+				entity.Property(e => e.Img)
+					.HasMaxLength(200)
+					.IsUnicode(false);
+
+				entity.Property(e => e.Price).HasColumnName("Price");
+
+				entity.HasOne(d => d.Garden)
                     .WithMany(p => p.Produces)
                     .HasForeignKey(d => d.GardenId)
                     .HasConstraintName("FK__Produce__GardenI__33D4B598");

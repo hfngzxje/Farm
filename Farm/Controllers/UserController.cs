@@ -3,6 +3,8 @@ using Farm.Modelss;
 using Farm.Service.IService;
 using Farm.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace Farm.Controllers
@@ -13,12 +15,15 @@ namespace Farm.Controllers
 	{
 		private readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+		private readonly FarmContext _context;
 
-        public UserController(IUserService userService, IHttpContextAccessor httpContextAccessor)
+		public UserController(IUserService userService, IHttpContextAccessor httpContextAccessor, FarmContext context)
 		{
 			_userService = userService;
             _httpContextAccessor = httpContextAccessor;
-        }
+			_context = context;
+
+		}
 
         [HttpPost("login")]
         public async Task<ActionResult> Login(LoginRequestDTO loginRequest)
@@ -64,6 +69,30 @@ namespace Farm.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("isAdmin")]
+        public IActionResult IsAdmin()
+        {
+            try
+            {
+                var username = HttpContext.Session.GetString("Username");
+                if (!string.IsNullOrEmpty(username))
+                {
+                    var user = _context.Users.FirstOrDefault(u => u.Username == username);
+
+                    if (user != null)
+                    {
+                        return Ok(user.RoleId);
+                    }
+                }
+
+                return NotFound(); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
 
