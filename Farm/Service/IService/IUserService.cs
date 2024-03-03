@@ -8,6 +8,8 @@ namespace Farm.Service.IService
         Task<User> Authenticate(LoginRequestDTO loginRequest);
         Task<User> GetUserByUsernameAsync(string username);
 
+        void RegisterUser(RegisterRequestDTO registerRequest);
+
 
     }
 }

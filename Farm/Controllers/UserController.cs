@@ -47,11 +47,24 @@ namespace Farm.Controllers
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            // Xóa session
             HttpContext.Session.Clear();
 
-            // Xóa sessionStorage
             return Ok(new { message = "Logout successful" });
+        }
+
+
+        [HttpPost("register")]
+        public IActionResult Register(RegisterRequestDTO registerRequest)
+        {
+            try
+            {
+                _userService.RegisterUser(registerRequest);
+                return Ok("User registered successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
