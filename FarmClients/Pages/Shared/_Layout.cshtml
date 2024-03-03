@@ -53,6 +53,45 @@
                     <li class="nav-item">
                         <a class="nav-link" href="~/Clients/About">About</a>
                     </li>
+                    <li class="nav-item">
+                        <div class="login_btn-container ml-0 ml-lg-4 d-flex justify-content-center">
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            <script>
+                                $(document).ready(function () {
+                                    var userJson = sessionStorage.getItem('user');
+                                    if (userJson) {
+                                        var user = JSON.parse(userJson);
+                                        var welcomeMessage = '<a class="nav-link" href="#">Hello, ' + user.username + '!</a>';
+                                        var logoutButton = '<a class="nav-link" id="logoutButton" href="/Account/Logout" ">Logout</a>';
+                                        $('.login_btn-container').html(welcomeMessage + logoutButton);
+                                    } else {
+                                        var loginLink = '<a class="nav-link" href="Login">Login</a>';
+                                        var registerLink = '<a class="nav-link" href="Register" >Register</a>';
+                                        $('.login_btn-container').html(loginLink + registerLink);
+                                    }
+                                });
+
+
+                                $(document).ready(function () {
+                                    $('#logoutButton').click(function (event) {
+                                        event.preventDefault();
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: 'https://localhost:7020/api/User/logout',
+                                            success: function (response) {
+                                                sessionStorage.clear();
+                                                window.location.href = 'Home';
+                                            },
+                                            error: function (xhr, status, error) {
+                                                console.error('Error logging out:', error);
+                                            }
+                                        });
+                                    });
+                                });
+
+                            </script>
+                        </div>
+                    </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <div class="search_icon"><i class="fa fa-search" aria-hidden="true"></i></div>

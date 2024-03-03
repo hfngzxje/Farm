@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Farm.Modelss;
 using Farm.Service.IService;
+using Farm.Services;
 
 public class Program
 {
@@ -10,8 +11,18 @@ public class Program
 
         builder.Services.AddScoped<IProduceService, ProduceService>();
         builder.Services.AddScoped<IGardenService, GardenService>();
+		builder.Services.AddScoped<IUserService, UserService>();
 
-        builder.Services.AddControllers();
+
+		builder.Services.AddSession(options =>
+		{
+			options.IdleTimeout = TimeSpan.FromMinutes(30); 
+			options.Cookie.HttpOnly = true; 
+			options.Cookie.IsEssential = true; 
+		});
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddDistributedMemoryCache();
+		builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddCors(opts =>
@@ -23,7 +34,8 @@ public class Program
         builder.Services.AddDbContext<FarmContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-        var app = builder.Build();
+
+		var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -35,12 +47,16 @@ public class Program
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
         }
-
-        app.UseHttpsRedirection();
+		app.UseSession();
+		app.UseHttpsRedirection();
         app.UseCors("CORSPolicy");
         app.UseAuthorization();
-
-        app.MapControllers();
+		app.MapControllers();
+        app.UseRouting();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
 
         app.Run();
     }

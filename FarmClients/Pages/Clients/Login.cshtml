@@ -1,0 +1,79 @@
+﻿@page
+@{
+	Layout = null;
+}
+@model FarmClients.Pages.Clients.LoginModel
+@{
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Login</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="username">User Name:</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                            <div id="error-message" class="text-danger mt-2"></div>
+                        </form>
+                        <br>
+                        <button onclick="window.location.href='Register'" class="btn btn-primary btn-block">Register</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#loginForm').submit(function (event) {
+                event.preventDefault();
+                var formData = {
+                    username: $('#username').val(),
+                    password: $('#password').val()
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: 'https://localhost:7020/api/User/login',
+                    data: JSON.stringify(formData),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        sessionStorage.setItem('user', JSON.stringify(response.user));
+
+                        var role = response.user.roleId;
+                        if (role == '1') {
+                            window.location.href = '/Admin/AdminHome';
+                        } else if (role == '2') {
+                            window.location.href = 'Home';
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        $('#error-message').text('Invalid username or password');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

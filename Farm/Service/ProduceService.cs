@@ -30,7 +30,9 @@ public class ProduceService : IProduceService
             PlantingDate = produceRequest.PlantingDate.Value,
             ExpectedHarvestDate = produceRequest.ExpectedHarvestDate.Value,
             ActualHarvestDate = produceRequest.ActualHarvestDate.Value,
-            GardenId = produceRequest.GardenId.Value
+            GardenId = produceRequest.GardenId.Value,
+            Quantity = produceRequest.Quantity.Value,
+            Status = produceRequest.Status.Value,   
         };
 
         _context.Produces.Add(produce);
@@ -97,7 +99,10 @@ public class ProduceService : IProduceService
         existingProduce.ExpectedHarvestDate = produceRequest.ExpectedHarvestDate.Value;
         existingProduce.ActualHarvestDate = produceRequest.ActualHarvestDate.Value;
         existingProduce.GardenId = produceRequest.GardenId.Value;
+		existingProduce.Quantity = produceRequest.Quantity.Value;
+		existingProduce.Status = produceRequest.Status;
 
-        _context.SaveChanges();
+
+		_context.SaveChanges();
     }
 }
