@@ -4,6 +4,28 @@
 	Layout = "~/Pages/Admin/Shared/_AdminLayout.cshtml";
 }
 
+<style>
+	.status-yellow {
+		background-color: yellow;
+		color: black;
+	}
+
+	.status-green {
+		background-color: green;
+		color: white;
+	}
+
+	.status-blue {
+		background-color: blue;
+		color: white;
+	}
+
+	.status-red {
+		background-color: red;
+		color: white;
+	}
+</style>
+
 
 <html lang="en">
 <body>
@@ -27,54 +49,6 @@
 									<i class="material-icons">&#xE15C;</i>
 									<span>Delete</span>
 								</button>
-
-								<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-								<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-								<script>
-									$(document).ready(function () {
-										var selectedProduces = [];
-
-										$('.checkbox').change(function () {
-											var produceId = $(this).data('produceid');
-											if ($(this).prop('checked')) {
-												selectedProduces.push(produceId);
-											} else {
-												var index = selectedProduces.indexOf(produceId);
-												if (index !== -1) {
-													selectedProduces.splice(index, 1);
-												}
-											}
-										});
-
-										$('.btn-delete').click(function () {
-											deleteProduces(selectedProduces);
-										});
-									});
-
-									function deleteProduces(ids) {
-										if (ids.length === 0) {
-											alert('Please select at least one produce to delete.');
-											return;
-										}
-
-										$.ajax({
-											url: 'https://localhost:7020/api/Produce/delete',
-											method: 'DELETE',
-											contentType: 'application/json',
-											data: JSON.stringify(ids),
-											success: function (response) {
-												console.log('Produces deleted successfully:', response);
-												window.location.href = '/Admin/Produce';
-											},
-											error: function (error) {
-												console.error('Error deleting produces:', error);
-											}
-										});
-									}
-								</script>
-
-
-
 									</div>
 								</div>
 							</div>
@@ -96,29 +70,6 @@
 						<tbody>
 						</tbody>
 					</table>
-
-					<style>
-						.status-yellow {
-							background-color: yellow;
-							color: black;
-						}
-
-						.status-green {
-							background-color: green;
-							color: white;
-						}
-
-						.status-blue {
-							background-color: blue;
-							color: white;
-						}
-
-						.status-red {
-							background-color: red;
-							color: white;
-						}
-					</style>
-
 
 					<script>
 						fetch('https://localhost:7020/api/Produce')
@@ -143,7 +94,7 @@
 												<a href="#editEmployeeModal" class="edit" data-toggle="modal">
 													<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
 												</a>
-												<a href="#" class="delete" data-toggle="tooltip" title="Delete">
+												<a href="#" class="delete" onclick="deleteProduce(${produce.produceId})" data-toggle="tooltip" title="Delete">
 													<i class="material-icons" data-toggle="tooltip" title="Delete">delete</i>
 												</a>
 											</td>
@@ -175,6 +126,25 @@
 									return "Unknown";
 							}
 						}
+
+
+						// api xóa
+						function deleteProduce(id) {
+							var confirmDelete = confirm("Are you sure you want to delete this produce?");
+							if (confirmDelete) {
+								$.ajax({
+									url: 'https://localhost:7020/api/Produce/delete/' + id,
+									type: 'DELETE',
+									success: function (result) {
+										window.location.href = '/Admin/Produce';
+									},
+									error: function (xhr, status, error) {
+										alert('Error: ' + error);
+									}
+								});
+							}
+						}
+
 
 					</script>
 
