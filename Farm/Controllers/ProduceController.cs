@@ -64,21 +64,21 @@ public class ProduceController : ControllerBase
         }
     }
 
-    [HttpDelete("delete/{id}")]
-    public IActionResult DeleteProduce(int id)
-    {
-        try
-        {
-            _produceService.DeleteProduce(id);
-            return Ok("Produce deleted successfully");
-        }
-        catch (Exception ex)
-        {
-            return BadRequest($"Error: {ex.Message}");
-        }
-    }
+	[HttpDelete("delete")]
+    public IActionResult DeleteProduces([FromBody] List<int> ids)
+	{
+		try
+		{
+			_produceService.DeleteProduces(ids);
+			return Ok("Produces deleted successfully");
+		}
+		catch (Exception ex)
+		{
+			return BadRequest($"Error: {ex.Message}");
+		}
+	}
 
-    [HttpGet("Search")]
+	[HttpGet("Search")]
     public IActionResult SearchProduces(string? name)
     {
         try

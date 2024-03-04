@@ -32,7 +32,7 @@ public class ProduceService : IProduceService
             ActualHarvestDate = produceRequest.ActualHarvestDate.Value,
             GardenId = produceRequest.GardenId.Value,
             Quantity = produceRequest.Quantity.Value,
-            Status = 1,   
+            Status = produceRequest.Status.Value,  
             Img = produceRequest.Img,
             Price = produceRequest.Price,
         };
@@ -41,19 +41,20 @@ public class ProduceService : IProduceService
         _context.SaveChanges();
     }
 
-    public void DeleteProduce(int id)
-    {
-        var existingProduce = _context.Produces.Find(id);
-        if (existingProduce == null)
-        {
-            throw new Exception("Produce not found");
-        }
+	public void DeleteProduces(List<int> ids)
+	{
+		foreach (int id in ids)
+		{
+			var produce = _context.Produces.Find(id);
+			if (produce != null)
+			{
+				_context.Produces.Remove(produce);
+			}
+		}
+		_context.SaveChanges();
+	}
 
-        _context.Produces.Remove(existingProduce);
-        _context.SaveChanges();
-    }
-
-    public List<Produce> GetAllProduces()
+	public List<Produce> GetAllProduces()
     {
         return _context.Produces.ToList();
     }
