@@ -9,6 +9,6 @@ public interface IProduceService
     Produce GetProduceById(int id);
     void AddProduce(ProduceRequestDTO produce);
     void UpdateProduce(int id, ProduceRequestDTO produceRequest);
-    public void DeleteProduces(List<int> ids);
+	void DeleteProduce(int id);
 	IEnumerable<Produce> SearchProduces(string name);
 }

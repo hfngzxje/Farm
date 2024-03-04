@@ -64,13 +64,13 @@ public class ProduceController : ControllerBase
         }
     }
 
-	[HttpDelete("delete")]
-    public IActionResult DeleteProduces([FromBody] List<int> ids)
+	[HttpDelete("delete/{id}")]
+	public IActionResult DeleteProduce(int id)
 	{
 		try
 		{
-			_produceService.DeleteProduces(ids);
-			return Ok("Produces deleted successfully");
+			_produceService.DeleteProduce(id);
+			return Ok("Produce deleted successfully");
 		}
 		catch (Exception ex)
 		{

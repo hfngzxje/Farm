@@ -9,7 +9,6 @@
 <body>
 			<div class="main-content">
 				<div class="row">
-					<div class="col-md-12">
 						<div class="table-wrapper">
 
 							<div class="table-title">
@@ -80,13 +79,9 @@
 								</div>
 							</div>
 						</div>
-					</div>
 					<table id="employeeTable" class="table table-striped table-hover">
 						<thead>
 							<tr>
-								<th>
-									<input type="checkbox" id="selectAllCheckbox">
-								</th>
 								<th>Id</th>
 								<th>Name</th>
 								<th>Description</th>
@@ -132,9 +127,6 @@
 								data.forEach(produce => {
 									const row = `
 										<tr>
-											<td>
-												<input type="checkbox" class="checkbox" data-produceid="${produce.produceId}">
-											</td>
 											<td>${produce.produceId}</td>
 											<td>${produce.name}</td>
 											<td>${produce.description}</td>
@@ -143,7 +135,6 @@
 											<td>${formatDate(produce.actualHarvestDate)}</td>
 											<td>${produce.quantity}</td>
 											<td>${getStatusText(produce.status)}</td>
-
 											<td>
 												<a href="#viewEmployeeDetailsModal" class="view-details" data-toggle="modal">
 													<i class="material-icons" data-toggle="tooltip" title="View Details">visibility</i>
@@ -151,6 +142,9 @@
 
 												<a href="#editEmployeeModal" class="edit" data-toggle="modal">
 													<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+												</a>
+												<a href="#" class="delete" data-toggle="tooltip" title="Delete">
+													<i class="material-icons" data-toggle="tooltip" title="Delete">delete</i>
 												</a>
 											</td>
 										</tr>`;
@@ -182,19 +176,6 @@
 							}
 						}
 
-					
-
-
-					</script>
-
-					<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-					<script>
-						$(document).ready(function () {
-							$('#selectAllCheckbox').change(function () {
-								var isChecked = $(this).prop('checked');
-								$('input[type="checkbox"][id="checkbox"]').prop('checked', isChecked);
-							});
-						});
 					</script>
 
 
@@ -441,6 +422,9 @@
 
 		});
 	</script>
+
+	<br><br>
+
 
 </body>
 </html>

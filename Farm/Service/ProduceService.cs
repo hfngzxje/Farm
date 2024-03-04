@@ -41,16 +41,15 @@ public class ProduceService : IProduceService
         _context.SaveChanges();
     }
 
-	public void DeleteProduces(List<int> ids)
+	public void DeleteProduce(int id)
 	{
-		foreach (int id in ids)
+		var existingProduce = _context.Produces.Find(id);
+		if (existingProduce == null)
 		{
-			var produce = _context.Produces.Find(id);
-			if (produce != null)
-			{
-				_context.Produces.Remove(produce);
-			}
+			throw new Exception("Produce not found");
 		}
+
+		_context.Produces.Remove(existingProduce);
 		_context.SaveChanges();
 	}
 
