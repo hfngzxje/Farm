@@ -152,7 +152,7 @@
 										<span aria-hidden="true">&times;</span>
 									</button>
 								</div>
-								<div class="modal-body">
+								<div class="modal-body">										
 										<div class="form-group">
 											<label for="name">Name</label>
 											<input type="text" class="form-control" id="name" required>
@@ -260,7 +260,6 @@
 								return;
 							}
 
-							// Gửi request AJAX để tạo sản phẩm
 							$.ajax({
 								url: 'https://localhost:7020/api/Produce/addProduce',
 								method: 'POST',
@@ -283,145 +282,193 @@
 
 					<!----edit-modal end--------->
 					<!----edit-modal start--------->
-						<div class="modal fade" tabindex="-1" id="editModal" role="dialog">
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
+			<div class="modal fade" tabindex="-1" id="editModal" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
 							<h5 class="modal-title">Edit Produce</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<div class="form-group">
-										<label for="name">Name</label>
-										<input type="text" class="form-control" id="name" required>
-									</div>
-									<div class="form-group">
-										<label for="description">Description</label>
-										<input type="text" class="form-control" id="description" required>
-									</div>
-									<div class="form-group">
-										<label for="plantingDate">Planting Date</label>
-										<input type="date" class="form-control" id="plantingDate" required>
-									</div>
-									<div class="form-group">
-										<label for="expectedHarvestDate">Expected Harvest Date</label>
-										<input type="date" class="form-control" id="expectedHarvestDate" required>
-									</div>
-									<div class="form-group">
-										<label for="actualHarvestDate">Actual Harvest Date</label>
-										<input type="date" class="form-control" id="actualHarvestDate">
-									</div>
-									<div class="form-group">
-										<label for="gardenId">Garden:</label>
-										<select id="gardenId" name="gardenId" class="form-control"></select>
-									</div>
-									<div class="form-group">
-										<label for="quantity">Quantity</label>
-										<input type="number" class="form-control" id="quantity" required>
-									</div>
-									<div class="form-group">
-										<label for="img">Img</label>
-										<input type="text" class="form-control" id="img">
-									</div>
-									<div class="form-group">
-										<label for="price">Price</label>
-										<input type="number" class="form-control" id="price">
-									</div>
-									<div class="form-group">
-										<label for="status">Status</label>
-										<select class="form-control" id="status">
-											<option value="1">Taking care</option>
-											<option value="2">Harvest</option>
-											<option value="3">Preserve</option>
-											<option value="4">Expired</option>
-										</select>
-									</div>
-								</div>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+
+							<input type="hidden" id="produceId">
+
+							<div class="form-group">
+								<label for="name">Name</label>
+								<input type="text" class="form-control" id="name" required>
 							</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-									<button type="button" class="btn btn-success">Edit</button>
-								</div>
+							<div class="form-group">
+								<label for="description">Description</label>
+								<input type="text" class="form-control" id="description" required>
 							</div>
+							<div class="form-group">
+								<label for="plantingDate">Planting Date</label>
+								<input type="date" class="form-control" id="plantingDate" required>
+							</div>
+							<div class="form-group">
+								<label for="expectedHarvestDate">Expected Harvest Date</label>
+								<input type="date" class="form-control" id="expectedHarvestDate" required>
+							</div>
+							<div class="form-group">
+								<label for="actualHarvestDate">Actual Harvest Date</label>
+								<input type="date" class="form-control" id="actualHarvestDate">
+							</div>
+							<div class="form-group">
+								<label for="gardenId">Garden:</label>
+								<select id="gardenId" class="form-control">
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="quantity">Quantity</label>
+								<input type="number" class="form-control" id="quantity" required>
+							</div>
+							<div class="form-group">
+								<label for="img">Img</label>
+								<input type="text" class="form-control" id="img">
+							</div>
+							<div class="form-group">
+								<label for="price">Price</label>
+								<input type="number" class="form-control" id="price">
+							</div>
+							<div class="form-group">
+								<label for="status">Status</label>
+								<select class="form-control" id="status">
+									<option value="1">Taking care</option>
+									<option value="2">Harvest</option>
+									<option value="3">Preserve</option>
+									<option value="4">Expired</option>
+								</select>
+							</div>
+						</div>
+						<p style="color: red; text-align: center" id="mess2"></p>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-success" id="btnEdit">Edit</button>
 						</div>
 					</div>
 				</div>
 			</div>
 
+			<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+			<script>
+				function editProduce(id) {
+					$.ajax({
+						url: 'https://localhost:7020/api/Produce/getBy/' + id,
+						type: 'GET',
+						success: function (produce) {
+							$('#editModal #produceId').val(produce.produceId);
+							$('#editModal #name').val(produce.name);
+							$('#editModal #description').val(produce.description);
+							$('#editModal #plantingDate').val(new Date(produce.plantingDate).toISOString().split('T')[0]);
+							$('#editModal #expectedHarvestDate').val(new Date(produce.expectedHarvestDate).toISOString().split('T')[0]);
+							$('#editModal #actualHarvestDate').val(new Date(produce.actualHarvestDate).toISOString().split('T')[0]);
+							$('#editModal #quantity').val(produce.quantity);
+							$('#editModal #status').val(produce.status);
+							$('#editModal #img').val(produce.img);
+							$('#editModal #price').val(produce.price);
 
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script>
-		function editProduce(id) {
-			// Gửi yêu cầu AJAX để lấy thông tin của produce dựa trên id
-			$.ajax({
-				url: 'https://localhost:7020/api/Produce/getBy/' + id,
-				type: 'GET',
-				success: function (produce) {
-					// Điền thông tin của produce vào modal chỉnh sửa					
-					$('#editModal #produceId').val(produce.produceId);
-					$('#editModal #name').val(produce.name);
-					$('#editModal #description').val(produce.description);
-					$('#editModal #plantingDate').val(new Date(produce.plantingDate).toISOString().split('T')[0]);
-					$('#editModal #expectedHarvestDate').val(new Date(produce.expectedHarvestDate).toISOString().split('T')[0]);
-					$('#editModal #actualHarvestDate').val(new Date(produce.actualHarvestDate).toISOString().split('T')[0]);
-					$('#editModal #quantity').val(produce.quantity);
-					$('#editModal #status').val(produce.status);
-					$('#editModal #img').val(produce.img);
-					$('#editModal #price').val(produce.price);
+							$.ajax({
+								url: 'https://localhost:7020/api/Garden',
+								type: 'GET',
+								success: function (gardens) {
+									$('#editModal #gardenId').empty();
 
+									gardens.forEach(function (garden) {
+										$('#editModal #gardenId').append($('<option>', {
+											value: garden.gardenId,
+											text: garden.name
+										}));
+									});
 
-					$('#editModal').modal('show');
-				},
-				error: function (xhr, status, error) {
-					alert('Error: ' + error); // Hiển thị thông báo lỗi nếu có lỗi khi gửi yêu cầu AJAX
+									$('#editModal #gardenId').val(produce.gardenId);
+
+									$('#editModal').modal('show');
+								},
+								error: function (xhr, status, error) {
+									alert('Error: ' + error);
+								}
+							});
+						},
+						error: function (xhr, status, error) {
+							alert('Error: ' + error);
+						}
+					});
 				}
-			});
-		}
 
-		$(document).ready(function () {
-			// Sự kiện click cho nút "Edit" trong modal chỉnh sửa
-			$('#editModal .btn-success').click(function () {
-				LoadGarden();
-				var produceId = $('#editModal #produceId').val();
-				var name = $('#editModal #name').val();
-				var description = $('#editModal #description').val();
-				var plantingDate = $('#editModal #plantingDate').val();
-				var expectedHarvestDate = $('#editModal #expectedHarvestDate').val();
-				var actualHarvestDate = $('#editModal #actualHarvestDate').val();
-				var quantity = $('#editModal #quantity').val();
-				var status = $('#editModal #status').val();
-				var img = $('#editModal #img').val();
-				var price = $('#editModal #price').val();
+				$(document).ready(function () {
+					$('#btnEdit').click(function () {
+						var produceId = $('#editModal #produceId').val();
+						var name = $('#editModal #name').val();
+						var description = $('#editModal #description').val();
+						var plantingDate = $('#editModal #plantingDate').val();
+						var expectedHarvestDate = $('#editModal #expectedHarvestDate').val();
+						var actualHarvestDate = $('#editModal #actualHarvestDate').val();
+						var gardenId = $('#editModal #gardenId').val();
+						var quantity = $('#editModal #quantity').val();
+						var status = $('#editModal #status').val();
+						var img = $('#editModal #img').val();
+						var price = $('#editModal #price').val();
 
-				// Gửi dữ liệu đến API sửa thông qua Ajax
-				$.ajax({
-					url: 'https://localhost:7020/api/Produce/update/' + produceId,
-					type: 'PUT',
-					data: {
-						name: name,
-						description: description,
-						plantingDate: plantingDate,
-						expectedHarvestDate: expectedHarvestDate,
-						actualHarvestDate: actualHarvestDate,
-						quantity: quantity,
-						status: status,
-						img: img,
-						price: price
-					},
-					success: function (result) {
-						alert(result); // Hiển thị thông báo thành công
-						$('#editModal').modal('hide'); // Đóng modal chỉnh sửa
-						// Cập nhật giao diện hoặc thực hiện các thao tác khác nếu cần
-					},
-					error: function (xhr, status, error) {
-						alert('Error: ' + error); // Hiển thị thông báo lỗi nếu có lỗi khi gửi yêu cầu AJAX
-					}
+						if (name == null || name.trim() === '') {
+							$('#mess2').text('Name is required!');
+							return;
+						}
+						if (plantingDate == null || plantingDate.trim() === '') {
+							$('#mess2').text('Planting Date is required!');
+							return;
+						}
+						if (expectedHarvestDate == null || expectedHarvestDate.trim() === '') {
+							$('#mess2').text('Expected Harvest Date is required!');
+							return;
+						}
+						if (plantingDate > actualHarvestDate) {
+							$('#mess2').text('Actual Harvest Date must be greater than Planting Date!');
+							return;
+						}
+						if (plantingDate > expectedHarvestDate) {
+							$('#mess2').text('Expected Harvest Date must be greater than Planting Date!');
+							return;
+						}
+						if (quantity == null || quantity.trim() === '') {
+							$('#mess2').text('Quantity is required!');
+							return;
+						}
+						if (price == null || price.trim() === '') {
+							$('#mess2').text('Price is required!');
+							return;
+						}
+
+
+						$.ajax({
+							url: 'https://localhost:7020/api/Produce/update/' + produceId,
+							type: 'PUT',
+							contentType: 'application/json',
+							data: JSON.stringify({
+								produceId: produceId,
+								name: name,
+								description: description,
+								plantingDate: plantingDate,
+								expectedHarvestDate: expectedHarvestDate,
+								actualHarvestDate: actualHarvestDate,
+								gardenId: gardenId,
+								quantity: quantity,
+								status: status,
+								img: img,
+								price: price,
+							}),
+							success: function (result) {
+								alert(result);
+								window.location.href = '/Admin/Produce';
+							},
+							error: function (xhr, status, error) {
+								alert('Error: ' + error);
+							}
+						});
+					});
 				});
-			});
-		});
-	</script>
+			</script>
 
 
 
