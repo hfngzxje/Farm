@@ -81,9 +81,9 @@
 											<td>${produce.quantity}</td>
 											<td>${getStatusText(produce.status)}</td>
 											<td>
-												<a href="#viewEmployeeDetailsModal" class="view-details" data-toggle="modal">
-													<i class="material-icons" data-toggle="tooltip" title="View Details">visibility</i>
-
+												<a href="#" class="view-details" data-toggle="tooltip" title="View Details" onclick="viewDetailsProduce(${produce.produceId})">
+													<i class="material-icons">visibility</i>
+												</a>
 												<a href="#editModal" class="editModal" data-toggle="modal" onclick="editProduce(${produce.produceId})">
 													<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
 												</a>
@@ -136,6 +136,10 @@
 									}
 								});
 							}
+						}
+
+						function viewDetailsProduce(produceId) {
+							window.location.href = '/Admin/DetailsProduce?id=' + produceId;
 						}
 
 

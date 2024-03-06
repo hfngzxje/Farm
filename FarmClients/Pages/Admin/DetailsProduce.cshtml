@@ -1,0 +1,134 @@
+﻿@page
+@model FarmClients.Pages.Admin.DetailsProduceModel
+@{
+	Layout = "~/Pages/Admin/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .status-yellow {
+        background-color: yellow;
+        color: black;
+    }
+
+    .status-green {
+        background-color: green;
+        color: white;
+    }
+
+    .status-blue {
+        background-color: blue;
+        color: white;
+    }
+
+    .status-red {
+        background-color: red;
+        color: white;
+    }
+</style>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="main-content">
+        <div class="row">
+            <div class="table-wrapper">
+
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6 p-0 flex justify-content-lg-start justify-content-center">
+                            <h2 class="ml-lg-2">Manage Process</h2>
+                        </div>
+                        <div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
+                            <a class="btn btn-secondary" href="/Admin/Produce">
+                                <span>Back to list</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table id="productTable" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>PlantingDate</th>
+                        <th>ExpectedHarvestDate</th>
+                        <th>ActualHarvestDate</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        <script>
+                $(document).ready(function () {
+                    var urlParams = new URLSearchParams(window.location.search);
+                    var produceId = urlParams.get('id');
+
+                    getProduceDetails(produceId);
+                });
+
+                function getProduceDetails(produceId) {
+                    $.ajax({
+                        url: 'https://localhost:7020/api/Produce/getBy/' + produceId,
+                        type: 'GET',
+                        success: function (response) {
+                            var product = response; 
+
+                            $('#productTable tbody').append(`
+                                        <tr>
+                                            <td>${product.produceId}</td>
+                                            <td>${product.name}</td>
+                                            <td>${product.description}</td>
+                                            <td>${formatDate(product.plantingDate)}</td>
+                                            <td>${formatDate(product.expectedHarvestDate)}</td>
+                                            <td>${formatDate(product.actualHarvestDate)}</td>
+                                            <td>${product.quantity}</td>
+                                            <td>${getStatusText(product.status)}</td>
+                                        </tr>
+                                    `);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                }
+
+                //format date
+                function formatDate(dateString) {
+                    const date = new Date(dateString);
+                    const year = date.getFullYear();
+                    let month = (date.getMonth() + 1).toString().padStart(2, '0');
+                    let day = date.getDate().toString().padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                }
+
+                //get status
+                function getStatusText(status) {
+                    switch (status) {
+                        case 1:
+                            return "<span class='status-yellow'>Taking care</span>";
+                        case 2:
+                            return "<span class='status-green'>Harvest</span>";
+                        case 3:
+                            return "<span class='status-blue'>Preserve</span>";
+                        case 4:
+                            return "<span class='status-red'>Expired</span>";
+                        default:
+                            return "Unknown";
+                    }
+                }
+        </script>
+</body>
+</html>

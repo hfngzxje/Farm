@@ -111,8 +111,10 @@ namespace Farm.Modelss
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.ProduceId).HasColumnName("ProduceID");
+				entity.Property(e => e.Quantity).HasColumnName("Quantity");
+				entity.Property(e => e.TotalPrice).HasColumnName("TotalPrice");
 
-                entity.HasOne(d => d.Order)
+				entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.OrderId)
                     .HasConstraintName("FK__OrderDeta__Order__571DF1D5");

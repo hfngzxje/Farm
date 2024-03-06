@@ -2,6 +2,7 @@
 using Farm.Modelss;
 using Farm.Service.IService;
 using Farm.Services;
+using Farm.Service;
 
 public class Program
 {
@@ -12,6 +13,7 @@ public class Program
         builder.Services.AddScoped<IProduceService, ProduceService>();
         builder.Services.AddScoped<IGardenService, GardenService>();
 		builder.Services.AddScoped<IUserService, UserService>();
+		builder.Services.AddScoped<IProcessService, ProcessService>();
 
 
 		builder.Services.AddSession(options =>
