@@ -43,10 +43,10 @@
 											<i class="material-icons">&#xE147;</i>
 											<span>Add New Produce</span>
 										</a>
-										<a href="#searchProduceModal" class="btn btn-success" data-toggle="modal">
+										<a href="#" class="btn btn-success" id="searchButton" onclick="searchProduce()">
 											<span>Search</span>
 										</a>
-										<input type="search" placeholder="Search">
+										<input type="search" id="searchInput" placeholder="Search">
 									</div>
 								</div>
 							</div>
@@ -65,7 +65,7 @@
 								<th>Action</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody id="searchResultsBody">
 						</tbody>
 					</table>
 
@@ -123,6 +123,7 @@
 									return "Unknown";
 							}
 						}
+							
 
 
 						// api xóa
@@ -146,7 +147,45 @@
 							window.location.href = '/Admin/DetailsProduce?id=' + produceId;
 						}
 
+										// api search
+										function searchProduce() {
+											var query = document.getElementById('searchInput').value;
 
+											fetch('https://localhost:7020/api/Produce/Search?name=' + query)
+												.then(response => response.json())
+												.then(data => {
+													// Xóa dữ liệu cũ trong tbody
+													$('#searchResultsBody').empty();
+
+													// Thêm dữ liệu mới vào tbody
+													data.forEach(item => {
+														const row = `
+															<tr>
+																<td>${item.produceId}</td>
+																<td>${item.name}</td>
+																<td>${item.description}</td>
+																<td>${formatDate(item.plantingDate)}</td>
+																<td>${formatDate(item.expectedHarvestDate)}</td>
+																<td>${formatDate(item.actualHarvestDate)}</td>
+																<td>${item.quantity}</td>
+																<td>${getStatusText(item.status)}</td>
+																<td>
+																	<a href="#" class="view-details" data-toggle="tooltip" title="View Details" onclick="viewDetailsProduce(${item.produceId})">
+																		<i class="material-icons">visibility</i>
+																	</a>
+																	<a href="#editModal" class="editModal" data-toggle="modal" onclick="editProduce(${item.produceId})">
+																		<i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+																	</a>
+																	<a href="#" class="delete" onclick="deleteProduce(${item.produceId})" data-toggle="tooltip" title="Delete">
+																		<i class="material-icons" data-toggle="tooltip" title="Delete">delete</i>
+																	</a>
+																</td>
+															</tr>`;
+														document.querySelector('#searchResultsBody').insertAdjacentHTML('beforeend', row);
+													});
+												})
+												.catch(error => console.error('There was a problem with the fetch operation:', error));
+										}
 					</script>
 
 

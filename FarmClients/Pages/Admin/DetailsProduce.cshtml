@@ -50,6 +50,10 @@
                             <a class="btn btn-secondary" href="/Admin/Produce">
                                 <span>Back to list</span>
                             </a>
+                            <a href="#" class="btn btn-success" id="searchButton" onclick="searchProcess()">
+                                <span>Search</span>
+                            </a>
+                            <input type="search" id="searchInput" placeholder="Search">
                         </div>
                     </div>
                 </div>
@@ -100,7 +104,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="searchResultsBody">
                         </tbody>
                     </table>
             
@@ -186,6 +190,42 @@
                         }
                     });
                 }
+
+                //api search
+                function searchProcess() {
+                    var name = document.getElementById('searchInput').value;
+                    var urlParams = new URLSearchParams(window.location.search);
+                    var produceId = urlParams.get('id');
+
+                    fetch(`https://localhost:7020/api/Process/Search?name=${name}&produceId=${produceId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            $('#searchResultsBody').empty();
+
+                            data.forEach(process => {
+                                const row = `
+                                    <tr>
+                                        <td>${process.processId}</td>
+                                        <td>${process.name}</td>
+                                        <td>${process.description}</td>
+                                        <td>${formatDateTime2(process.startTime)}</td>
+                                        <td>${formatDateTime2(process.endTime)}</td>
+                                        <td>${getStatusText2(process.status)}</td>
+                                        <td>
+                                            <a href="#editModal" class="editModal" data-toggle="modal" onclick="editProcess(${process.processId})">
+                                                <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+                                            </a>
+                                            <a href="#" class="delete" onclick="deleteProcess(${process.processId})" data-toggle="tooltip" title="Delete">
+                                                <i class="material-icons" data-toggle="tooltip" title="Delete">delete</i>
+                                            </a>
+                                        </td>
+                                    </tr>`;
+                                $('#searchResultsBody').append(row);
+                            });
+                        })
+                        .catch(error => console.error('There was a problem with the fetch operation:', error));
+                }
+
             </script>
 
 

@@ -63,9 +63,24 @@ namespace Farm.Service
             }
         }
 
-        public IEnumerable<Process> SearchProcess(string name)
+		public List<Process> SearchProcess(string? name, int? produceId)
 		{
-			return _context.Processes.Where(p => p.Name.Contains(name)).ToList();
+			if (!string.IsNullOrEmpty(name) && produceId.HasValue)
+			{
+				return _context.Processes.Where(p => p.Name.Contains(name) && p.ProduceId == produceId.Value).ToList();
+			}
+			else if (!string.IsNullOrEmpty(name))
+			{
+				return _context.Processes.Where(p => p.Name.Contains(name)).ToList();
+			}
+			else if (produceId.HasValue)
+			{
+				return _context.Processes.Where(p => p.ProduceId == produceId.Value).ToList();
+			}
+			else
+			{
+				return _context.Processes.ToList();
+			}
 		}
 
 		public void UpdateProcess(int id, ProcessRequestDTO process)

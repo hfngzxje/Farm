@@ -64,9 +64,9 @@ public class ProcessController : ControllerBase
 	}
 
 	[HttpGet("Search")]
-	public IActionResult SearchProcess([FromQuery] string name)
+	public IActionResult SearchProcess([FromQuery] string? name, [FromQuery] int? produceId)
 	{
-		var processes = _processService.SearchProcess(name);
+		var processes = _processService.SearchProcess(name, produceId);
 		return Ok(processes);
 	}
 }

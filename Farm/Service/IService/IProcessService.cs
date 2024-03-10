@@ -12,6 +12,6 @@ namespace Farm.Service.IService
         void AddProcess(ProcessRequestDTO process);
 		void UpdateProcess(int id, ProcessRequestDTO process);
 		void DeleteProcess(int id);
-		IEnumerable<Process> SearchProcess(string name);
+		public List<Process> SearchProcess(string? name, int? produceId);
 	}
 }
