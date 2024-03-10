@@ -31,10 +31,10 @@ public class ProcessController : ControllerBase
 		return Ok(process);
 	}
 
-	[HttpGet("ByProduceId/{id}")]
+	[HttpGet("GetAllProcessByProduceId/{id}")]
 	public IActionResult GetProcessByProduceId(int id)
 	{
-		var process = _processService.GetProcessByProduceId(id);
+		var process = _processService.GetAllProcessByProduceId(id);
 		if (process == null)
 		{
 			return NotFound();
@@ -49,8 +49,8 @@ public class ProcessController : ControllerBase
 		return Ok("Process added successfully.");
 	}
 
-	[HttpPut("{id}")]
-	public IActionResult UpdateProcess(int id, [FromBody] ProcessRequestDTO process)
+    [HttpPut("update/{id}")]
+    public IActionResult UpdateProcess(int id, [FromBody] ProcessRequestDTO process)
 	{
 		_processService.UpdateProcess(id, process);
 		return Ok("Process updated successfully.");

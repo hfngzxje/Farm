@@ -7,8 +7,9 @@ namespace Farm.Service.IService
 	{
 		List<Process> GetAllProcess();
 		Process GetProcessById(int id);
-		Process GetProcessByProduceId(int id);
-		void AddProcess(ProcessRequestDTO process);
+		public List<Process> GetAllProcessByProduceId(int produceId);
+
+        void AddProcess(ProcessRequestDTO process);
 		void UpdateProcess(int id, ProcessRequestDTO process);
 		void DeleteProcess(int id);
 		IEnumerable<Process> SearchProcess(string name);

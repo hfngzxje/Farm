@@ -50,12 +50,20 @@ namespace Farm.Service
 			return _context.Processes.FirstOrDefault(p => p.ProcessId == id);
 		}
 
-		public Process GetProcessByProduceId(int id)
-		{
-			return _context.Processes.FirstOrDefault(p => p.ProduceId == id);
-		}
+        public List<Process> GetAllProcessByProduceId(int produceId)
+        {
+            try
+            {
+                var processes = _context.Processes.Where(p => p.ProduceId == produceId).ToList();
+                return processes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
 
-		public IEnumerable<Process> SearchProcess(string name)
+        public IEnumerable<Process> SearchProcess(string name)
 		{
 			return _context.Processes.Where(p => p.Name.Contains(name)).ToList();
 		}
