@@ -103,111 +103,10 @@
                         <tbody>
                         </tbody>
                     </table>
-
-
-
-
-
-
-
-            <!----add-modal start--------->
-            <div class="modal fade" tabindex="-1" id="addProcessModal" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Add Process</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" id="name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="description">Description</label>
-                                <input type="text" class="form-control" id="description" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="startTime">Start time</label>
-                                <input type="datetime-local" class="form-control" id="startTime" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="endTime">End time</label>
-                                <input type="datetime-local" class="form-control" id="endTime" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="status">Status</label>
-                                <select class="form-control" id="status">
-                                    <option value="1">Processing</option>
-                                    <option value="2">Done</option>
-                                    <option value="3">Out of date</option>
-                                </select>
-                            </div>
-                        </div>
-                        <p style="color: red; text-align: center" id="mess"></p>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-success" id="btnAdd">Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <!----edit-modal start--------->
-            <div class="modal fade" tabindex="-1" id="editModal" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Edit Process</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" id="name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="description">Description</label>
-                                <input type="text" class="form-control" id="description" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="startTime">Start time</label>
-                                <input type="datetime-local" class="form-control" id="startTime" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="endTime">End time</label>
-                                <input type="datetime-local" class="form-control" id="endTime" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="status">Status</label>
-                                <select class="form-control" id="status">
-                                    <option value="1">Processing</option>
-                                    <option value="2">Done</option>
-                                    <option value="3">Out of date</option>
-                                </select>
-                            </div>
-                        </div>
-                        <p style="color: red; text-align: center" id="mess2"></p>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-success" id="btnEdit">Edit</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-        <!----script--------->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
+            
+            
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
                 $(document).ready(function () {
                     var urlParams = new URLSearchParams(window.location.search);
                     var produceId = urlParams.get('id');
@@ -287,58 +186,60 @@
                         }
                     });
                 }
+            </script>
 
 
-                //format date
-                function formatDate(dateString) {
-                    const date = new Date(dateString);
-                    const year = date.getFullYear();
-                    let month = (date.getMonth() + 1).toString().padStart(2, '0');
-                    let day = date.getDate().toString().padStart(2, '0');
-                    return `${year}-${month}-${day}`;
-                }
-
-                function formatDateTime2(dateTimeString) {
-                    const dateTime = new Date(dateTimeString);
-                    const year = dateTime.getFullYear();
-                    let month = (dateTime.getMonth() + 1).toString().padStart(2, '0');
-                    let day = dateTime.getDate().toString().padStart(2, '0');
-                    let hours = dateTime.getHours().toString().padStart(2, '0');
-                    let minutes = dateTime.getMinutes().toString().padStart(2, '0');
-                    return `${year}-${month}-${day} ${hours}:${minutes}`;
-                }
-
-                //get status
-                function getStatusText(status) {
-                    switch (status) {
-                        case 1:
-                            return "<span class='status-yellow'>Taking care</span>";
-                        case 2:
-                            return "<span class='status-green'>Harvest</span>";
-                        case 3:
-                            return "<span class='status-blue'>Preserve</span>";
-                        case 4:
-                            return "<span class='status-red'>Expired</span>";
-                        default:
-                            return "Unknown";
-                    }
-                }
-
-                function getStatusText2(status) {
-                    switch (status) {
-                        case 1:
-                            return "<span class='status-yellow'>Processing</span>";
-                        case 2:
-                            return "<span class='status-green'>Done</span>";
-                        case 3:
-                            return "<span class='status-blue'>Out of date</span>";
-                        default:
-                            return "Unknown";
-                    }
-                }
 
 
-                //add script
+
+            <!----add-modal start--------->
+            <div class="modal fade" tabindex="-1" id="addProcessModal" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Process</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <input type="text" class="form-control" id="description" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="startTime">Start time</label>
+                                <input type="datetime-local" class="form-control" id="startTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="endTime">End time</label>
+                                <input type="datetime-local" class="form-control" id="endTime" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select class="form-control" id="status">
+                                    <option value="1">Processing</option>
+                                    <option value="2">Done</option>
+                                    <option value="3">Out of date</option>
+                                </select>
+                            </div>
+                        </div>
+                        <p style="color: red; text-align: center" id="mess"></p>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-success" id="btnAdd">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
                 $(document).ready(function () {
                     $('#btnAdd').click(function () {
                         CreateProcess();
@@ -391,10 +292,60 @@
                         }
                     });
                 }
+            </script>
+
+           
 
 
 
-                //edit script
+            <!----edit-modal start--------->
+            <div class="modal fade" tabindex="-1" id="editModal" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Process</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input type="hidden" id="processId"> 
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <input type="text" class="form-control" id="description" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="startTime">Start time</label>
+                                <input type="datetime-local" class="form-control" id="startTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="endTime">End time</label>
+                                <input type="datetime-local" class="form-control" id="endTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select class="form-control" id="status">
+                                    <option value="1">Processing</option>
+                                    <option value="2">Done</option>
+                                    <option value="3">Out of date</option>
+                                </select>
+                            </div>
+                        </div>
+                        <p style="color: red; text-align: center" id="mess2"></p>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-success" id="btnEdit">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
                 function editProcess(id) {
                     $.ajax({
                         url: 'https://localhost:7020/api/Process/' + id,
@@ -414,61 +365,112 @@
                 }
 
                 $(document).ready(function () {
-                var urlParams = new URLSearchParams(window.location.search);
-                var produceId = urlParams.get('id');
+                    var urlParams = new URLSearchParams(window.location.search);
+                    var produceId = urlParams.get('id');
 
-                $('#btnEdit').click(function () {
-                    var processId = $('#editModal #processId').val();
-                    var name = $('#editModal #name').val();
-                    var description = $('#editModal #description').val();
-                    var startTime = $('#editModal #startTime').val();
-                    var endTime = $('#editModal #endTime').val();
-                    var status = $('#editModal #status').val();
+                    $('#btnEdit').click(function () {
+                        var processId = $('#editModal #processId').val();
+                        var name = $('#editModal #name').val();
+                        var description = $('#editModal #description').val();
+                        var startTime = $('#editModal #startTime').val();
+                        var endTime = $('#editModal #endTime').val();
+                        var status = $('#editModal #status').val();
 
-                    if (name == null || name == '') {
-                        $('#mess2').text('Name is required!');
-                        return;
-                    }
-                    if (startTime == null || startTime == '') {
-                        $('#mess2').text('StartTime is required!');
-                        return;
-                    }
-                    if (endTime == null || endTime == '') {
-                        $('#mess2').text('EndTime is required!');
-                        return;
-                    }
-                    if (startTime > endTime) {
-                        $('#mess2').text('EndTime must be greater than StartTime!');
-                        return;
-                    }
-
-                    $.ajax({
-                        url: 'https://localhost:7020/api/Process/update/' + processId,
-                        type: 'PUT',
-                        contentType: 'application/json',
-                        data: JSON.stringify({
-                            name: name,
-                            description: description,
-                            startTime: startTime,
-                            endTime: endTime,
-                            produceId: produceId,
-                            status: status,
-                               
-                        }),
-                        success: function (result) {
-                            alert(result);
-                            window.location.href = '/Admin/DetailsProduce?id=' + produceId;
-                        },
-                        error: function (xhr, status, error) {
-                            alert('Error: ' + error);
+                        if (name == null || name == '') {
+                            $('#mess2').text('Name is required!');
+                            return;
                         }
+                        if (startTime == null || startTime == '') {
+                            $('#mess2').text('StartTime is required!');
+                            return;
+                        }
+                        if (endTime == null || endTime == '') {
+                            $('#mess2').text('EndTime is required!');
+                            return;
+                        }
+                        if (startTime > endTime) {
+                            $('#mess2').text('EndTime must be greater than StartTime!');
+                            return;
+                        }
+
+                        $.ajax({
+                            url: 'https://localhost:7020/api/Process/update/' + processId,
+                            type: 'PUT',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                processId: processId,
+                                name: name,
+                                description: description,
+                                startTime: startTime,
+                                endTime: endTime,
+                                status: status,
+                                produceId: produceId
+                            }),
+                            success: function (result) {
+                                alert(result);
+                                window.location.href = '/Admin/DetailsProduce?id=' + produceId;
+                            },
+                            error: function (xhr, status, error) {
+                                alert('Error: ' + error);
+                            }
+                        });
                     });
                 });
-            });
+            </script>
 
 
 
 
+        <!----script--------->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+                //format date
+                function formatDate(dateString) {
+                    const date = new Date(dateString);
+                    const year = date.getFullYear();
+                    let month = (date.getMonth() + 1).toString().padStart(2, '0');
+                    let day = date.getDate().toString().padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                }
+
+                function formatDateTime2(dateTimeString) {
+                    const dateTime = new Date(dateTimeString);
+                    const year = dateTime.getFullYear();
+                    let month = (dateTime.getMonth() + 1).toString().padStart(2, '0');
+                    let day = dateTime.getDate().toString().padStart(2, '0');
+                    let hours = dateTime.getHours().toString().padStart(2, '0');
+                    let minutes = dateTime.getMinutes().toString().padStart(2, '0');
+                    return `${year}-${month}-${day} ${hours}:${minutes}`;
+                }
+
+                //get status
+                function getStatusText(status) {
+                    switch (status) {
+                        case 1:
+                            return "<span class='status-yellow'>Taking care</span>";
+                        case 2:
+                            return "<span class='status-green'>Harvest</span>";
+                        case 3:
+                            return "<span class='status-blue'>Preserve</span>";
+                        case 4:
+                            return "<span class='status-red'>Expired</span>";
+                        default:
+                            return "Unknown";
+                    }
+                }
+
+                function getStatusText2(status) {
+                    switch (status) {
+                        case 1:
+                            return "<span class='status-yellow'>Processing</span>";
+                        case 2:
+                            return "<span class='status-green'>Done</span>";
+                        case 3:
+                            return "<span class='status-red'>Out of date</span>";
+                        default:
+                            return "Unknown";
+                    }
+                }
         </script>
 </body>
 </html>
