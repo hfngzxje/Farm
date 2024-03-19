@@ -53,7 +53,12 @@ public class ProduceService : IProduceService
 		_context.SaveChanges();
 	}
 
-	public List<Produce> GetAllProduces()
+    public List<Produce> GetAllByStatus()
+    {
+        return _context.Produces.Where(x => x.Status == 3).ToList();
+    }
+
+    public List<Produce> GetAllProduces()
     {
         return _context.Produces.ToList();
     }

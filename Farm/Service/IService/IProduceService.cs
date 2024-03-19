@@ -11,4 +11,5 @@ public interface IProduceService
     void UpdateProduce(int id, ProduceRequestDTO produceRequest);
 	void DeleteProduce(int id);
 	IEnumerable<Produce> SearchProduces(string name);
+    List<Produce> GetAllByStatus();
 }

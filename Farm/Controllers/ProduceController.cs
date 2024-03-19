@@ -91,4 +91,18 @@ public class ProduceController : ControllerBase
             return BadRequest($"Error: {ex.Message}");
         }
     }
+
+    [HttpGet("getAllByStatus")]
+    public IActionResult getAllByStatus()
+    {
+        try
+        {
+            var produce = _produceService.GetAllByStatus();
+            return Ok(produce);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error: {ex.Message}");
+        }
+    }
 }

@@ -10,11 +10,13 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddScoped<IProduceService, ProduceService>();
+		builder.Services.AddScoped<IOrderService, OrderService>();
+		builder.Services.AddScoped<IProduceService, ProduceService>();
         builder.Services.AddScoped<IGardenService, GardenService>();
 		builder.Services.AddScoped<IUserService, UserService>();
 		builder.Services.AddScoped<IProcessService, ProcessService>();
 
+		builder.Services.AddScoped<OrderService>();
 
 		builder.Services.AddSession(options =>
 		{
@@ -32,17 +34,14 @@ public class Program
             opts.AddPolicy("CORSPolicy", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().SetIsOriginAllowed((host) => true));
         });
 
-        // Đăng ký FarmContext
         builder.Services.AddDbContext<FarmContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 		var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            // Cấu hình Swagger UI
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

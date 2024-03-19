@@ -84,9 +84,7 @@ namespace Farm.Modelss
             {
                 entity.ToTable("Order");
 
-                entity.Property(e => e.OrderId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("OrderID");
+				entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
@@ -104,12 +102,9 @@ namespace Farm.Modelss
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.Property(e => e.OrderDetailId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("OrderDetailID");
 
+				entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
-
                 entity.Property(e => e.ProduceId).HasColumnName("ProduceID");
 				entity.Property(e => e.Quantity).HasColumnName("Quantity");
 				entity.Property(e => e.TotalPrice).HasColumnName("TotalPrice");

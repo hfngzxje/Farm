@@ -154,10 +154,8 @@
 											fetch('https://localhost:7020/api/Produce/Search?name=' + query)
 												.then(response => response.json())
 												.then(data => {
-													// Xóa dữ liệu cũ trong tbody
 													$('#searchResultsBody').empty();
 
-													// Thêm dữ liệu mới vào tbody
 													data.forEach(item => {
 														const row = `
 															<tr>
