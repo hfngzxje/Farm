@@ -1,8 +1,21 @@
 ﻿@page
 @model FarmClients.Pages.Clients.ProduceModel
-@{
-}
 
+<style>
+    /* CSS */
+    .courses_section_2 {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-left: 50px;
+    }
+
+    .col-md-4 {
+        flex: 0 0 calc(33.333% - 20px); /* Đặt chiều rộng cho mỗi cột */
+        margin-bottom: 20px; /* Khoảng cách dưới cùng */
+        text-align: center; /* Căn giữa nội dung */
+    }
+</style>
 
 <div class="container-fluid">
     <div class="layout_border">
@@ -12,64 +25,9 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <h1 class="vagetables_taital">Our Vagetables</h1>
-                        <p class="vagetables_text">Passages of Lorem Ipsum available, but the majority have suffered alteration </p>
                     </div>
                 </div>
-                <div class="courses_section_2">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="hover01 column">
-                                <figure><img src="images/img-1.png"></figure>
-                            </div>
-                            <h3 class="harshal_text">Harshal</h3>
-                            <h3 class="rate_text">$19</h3>
-                            <div class="read_bt_1"><a href="#">Read More</a></div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="hover01 column">
-                                <figure><img src="images/img-2.png"></figure>
-                            </div>
-                            <h3 class="harshal_text">Foodism</h3>
-                            <h3 class="rate_text">$19</h3>
-                            <div class="read_bt_1"><a href="#">Read More</a></div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="hover01 column">
-                                <figure><img src="images/img-3.png"></figure>
-                            </div>
-                            <h3 class="harshal_text">Seven</h3>
-                            <h3 class="rate_text">$19</h3>
-                            <div class="read_bt_1"><a href="#">Read More</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="vagetables_section_2">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="hover01 column">
-                                <figure><img src="images/img-4.png"></figure>
-                            </div>
-                            <h3 class="harshal_text">Cyrus</h3>
-                            <h3 class="rate_text">$19</h3>
-                            <div class="read_bt_1"><a href="#">Read More</a></div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="hover01 column">
-                                <figure><img src="images/img-5.png"></figure>
-                            </div>
-                            <h3 class="harshal_text">Elianna</h3>
-                            <h3 class="rate_text">$19</h3>
-                            <div class="read_bt_1"><a href="#">Read More</a></div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="hover01 column">
-                                <figure><img src="images/img-6.png"></figure>
-                            </div>
-                            <h3 class="harshal_text">Friedman</h3>
-                            <h3 class="rate_text">$19</h3>
-                            <div class="read_bt_1"><a href="#">Read More</a></div>
-                        </div>
-                    </div>
+                <div class="courses_section_2" id="coursesSection" style="display: flex">
                 </div>
             </div>
         </div>
@@ -77,3 +35,152 @@
         <!-- layout_border end -->
     </div>
 </div>
+
+<!-- Order Model -->
+<div class="modal fade" tabindex="-1" id="orderModel" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Order Produce</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="productDetails">
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" class="form-control" id="quantity" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" class="form-control" id="address" required>
+                </div>
+            </div>
+            <p style="color: red; text-align: center" id="mess"></p>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="orderButton">Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add jQuery and Bootstrap JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#orderButton').click(function () {
+            var productId = $('#productDetails').data('productId');
+            var price = $('#productDetails').data('productPrice');
+            var quantity = $('#quantity').val();
+            var address = $('#address').val();
+
+            if (!productId || !quantity || !address) {
+                $('#mess').text('Please fill in all fields.');
+                return;
+            }
+            console.log(price);
+            placeOrder(productId, quantity, address, price);
+        });
+    });
+
+    function placeOrder(productId, quantity, address, price) {
+        var requestData = {
+            UserID: getUserIdFromSession(), 
+            OrderDetails: [{
+                ProduceID: productId,
+                Quantity: quantity,
+                Address: address,
+                Price: price
+            }]
+                
+        };
+        console.log(requestData);
+        $.ajax({
+            url: 'https://localhost:7020/api/Order/PlaceOrder',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData),
+            success: function (response) {
+                // Order successfully placed, display success message or take appropriate action
+                console.log('Order placed successfully:', response);
+                $('#mess').text('Order placed successfully!');
+            },
+            error: function (xhr, status, error) {
+                if (xhr.status === 400 && xhr.responseJSON && xhr.responseJSON.message) {
+                    $('#mess').text(xhr.responseJSON.message);
+                } else {
+                    $('#mess').text('Failed to place order ' + error);
+                }
+            }
+        });
+    }
+
+    // Function to get the user ID from session storage
+    function getUserIdFromSession() {
+        var userJson = sessionStorage.getItem('user');
+        if (userJson) {
+            var user = JSON.parse(userJson);
+            console.log(user);
+            return user.userId;
+        }
+        return null;
+    }
+
+    function getAllProduceByStatus() {
+        $.ajax({
+            url: 'https://localhost:7020/api/Produce/getAllByStatus',
+            type: 'GET',
+            success: function (data) {
+                $('#coursesSection').empty();
+
+                var html = '<div class="row">';
+                data.forEach(function (item, index) {
+                    if (index > 0 && index % 3 === 0) {
+                        html += '</div><div class="row">';
+                    }
+                    console.log(item);
+                    html += `
+                                <div class="col-md-4">
+                                    <div class="hover01 column">
+                                        <figure><img src="${item.image}" alt="Product Image"></figure>
+                                    </div>
+                                    <h3 class="harshal_text">${item.name}</h3>
+                                    <h3 class="rate_text">$${item.price}</h3>
+                                    <div class="read_bt_1">
+                                         <a href="#orderModel" class="orderModel" data-toggle="modal" onclick="checkLoginAndOpenModal(${item.produceId}, '${item.name}', ${item.price})">Order</a>
+                                    </div>
+                                </div>
+                            `;
+                });
+                html += '</div>';
+                $('#coursesSection').append(html);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+    function checkLoginAndOpenModal(productId, productName, productPrice) {
+        var userJson = sessionStorage.getItem('user');
+        if (userJson && userJson.length > 0) {
+            $('#productDetails').html(`
+                    <h2>Product Name: ${productName}</h2>
+                    <h2>Price: $${productPrice}</h2>
+                `);
+            $('#productDetails').data('productId', productId); 
+            $('#productDetails').data('productPrice', productPrice);
+            $('#orderModel').modal('show');
+        } else {
+            window.location.href = '/Clients/Login';
+        }
+    }
+
+    getAllProduceByStatus();
+
+</script>

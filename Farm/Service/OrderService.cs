@@ -48,7 +48,8 @@ namespace Farm.Service
 						OrderId = newOrder.OrderId,
 						ProduceId = orderDetail.ProduceID,
 						Quantity = orderDetail.Quantity,
-						TotalPrice = orderDetail.Quantity * orderDetail.Price
+						TotalPrice = orderDetail.Quantity * orderDetail.Price,
+						Address = orderDetail.Address
 					};
 
 					_context.OrderDetails.Add(newOrderDetail);

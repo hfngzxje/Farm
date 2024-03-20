@@ -10,6 +10,7 @@ namespace Farm.Modelss
         public int? ProduceId { get; set; }
         public int? Quantity { get; set; }
         public double? TotalPrice { get; set; }
+        public string? Address { get; set; }
 
 
 		public virtual Order? Order { get; set; }
