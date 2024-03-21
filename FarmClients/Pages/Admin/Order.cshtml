@@ -1,0 +1,176 @@
+﻿@page
+@model FarmClients.Pages.Admin.Shared.OrderModel
+@{
+	Layout = "~/Pages/Admin/Shared/_AdminLayout.cshtml";
+}
+
+
+<style>
+	.status-yellow {
+		background-color: yellow;
+		color: black;
+	}
+
+	.status-green {
+		background-color: green;
+		color: white;
+	}
+
+	.status-blue {
+		background-color: blue;
+		color: white;
+	}
+
+	.status-red {
+		background-color: red;
+		color: white;
+	}
+</style>
+
+
+<html lang="en">
+<body>
+	<div class="main-content">
+		<div class="row">
+			<div class="table-wrapper">
+
+				<div class="table-title">
+					<div class="row">
+						<div class="col-sm-6 p-0 flex justify-content-lg-start justify-content-center">
+							<h2 class="ml-lg-2">Manage  Order</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+			<table id="orderTable" class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>User Name</th>
+						<th>Order Date</th>
+						<th>Status</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+
+			<script>
+				fetch('https://localhost:7020/api/Order')
+					.then(response => response.json())
+					.then(data => {
+						data.forEach(order => {
+							fetch(`https://localhost:7020/api/User/` + order.userId)
+
+								.then(response => response.json())
+								.then(user => {								
+									const userNameColumn = document.querySelector(`#orderTable tbody tr[data-order-id="${order.orderId}"] .user-name`);
+									if (userNameColumn) {
+										console.log(user);
+										userNameColumn.textContent = user.userName;
+									}
+								})
+								.catch(error => console.error('There was a problem with the fetch operation:', error));
+
+							const row = `
+								<tr data-order-id="${order.orderId}">
+									<td>${order.orderId}</td>
+									<td class="user-name"></td>
+									<td>${formatDate(order.orderDate)}</td>
+									<td>${getStatusText(order.status)}</td>
+									<td>
+										<a href="#" class="view-details" data-toggle="tooltip" title="View Details" onclick="viewDetailsOrder(${order.orderId})">
+											<i class="material-icons">visibility</i>
+										</a>
+										<a href="#" class="delete" onclick="deleteOrder(${order.orderId})" data-toggle="tooltip" title="Delete">
+											<i class="material-icons" data-toggle="tooltip" title="Delete">delete</i>
+										</a>
+									</td>
+								</tr>`;
+							document.querySelector('#orderTable tbody').insertAdjacentHTML('beforeend', row);
+						});
+					})
+					.catch(error => console.error('There was a problem with the fetch operation:', error));
+
+				function formatDate(dateString) {
+					const date = new Date(dateString);
+					const year = date.getFullYear();
+					let month = (date.getMonth() + 1).toString().padStart(2, '0');
+					let day = date.getDate().toString().padStart(2, '0');
+					return `${year}-${month}-${day}`;
+				}
+
+				function getStatusText(status) {
+					switch (status) {
+						case 1:
+							return "<span class='status-yellow'>Pending</span>";
+						case 2:
+							return "<span class='status-green'>Approved</span>";
+						case 3:
+							return "<span class='status-blue'>Delivering</span>";
+						case 4:
+							return "<span class='status-green'>Received</span>";
+						case 5:
+							return "<span class='status-red'>Cancel order</span>";
+						default:
+							return "Unknown";
+					}
+				}
+
+
+
+				// api xóa
+				function deleteOrder(id) {
+					var confirmDelete = confirm("Are you sure you want to delete this order?");
+					if (confirmDelete) {
+						$.ajax({
+							url: 'https://localhost:7020/api/Order/delete/' + id,
+							type: 'DELETE',
+							success: function (result) {
+								window.location.href = '/Admin/Order';
+							},
+							error: function (xhr, status, error) {
+								alert('Error: ' + error);
+							}
+						});
+					}
+				}
+
+				function viewDetailsOrder(orderId) {
+					window.location.href = '/Admin/DetailsOrder?id=' + orderId;
+				}
+				
+			</script>	
+
+			
+
+			<!----edit-modal end--------->
+
+
+
+			<script src="~/jsAD/jquery-3.3.1.slim.min.js"></script>
+			<script src="~/jsAD/popper.min.js"></script>
+			<script src="~/jsAD/bootstrap.min.js"></script>
+			<script src="~/jsAD/jquery-3.3.1.min.js"></script>
+
+
+			<script type="text/javascript">
+				$(document).ready(function () {
+					$(".xp-menubar").on('click', function () {
+						$("#sidebar").toggleClass('active');
+						$("#content").toggleClass('active');
+					});
+
+					$('.xp-menubar,.body-overlay').on('click', function () {
+						$("#sidebar,.body-overlay").toggleClass('show-nav');
+					});
+
+				});				
+			</script>
+
+			<br><br>
+
+
+</body>
+</html>

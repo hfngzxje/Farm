@@ -88,11 +88,9 @@ namespace Farm.Modelss
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Status)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+				entity.Property(e => e.Status).HasColumnName("Status");
 
-                entity.Property(e => e.UserId).HasColumnName("UserID");
+				entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Orders)

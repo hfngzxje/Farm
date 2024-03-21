@@ -2,7 +2,8 @@
 {
 	public class OrderRequestDTO
 	{
-		public int UserID { get; set; } 
+		public int UserID { get; set; }
+		public int? Status { get; set; }
 		public List<OrderDetailRequest> OrderDetails { get; set; } 
 	}
 

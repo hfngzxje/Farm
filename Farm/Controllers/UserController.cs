@@ -96,6 +96,15 @@ namespace Farm.Controllers
             }
         }
 
-
-    }
+		[HttpGet("{userId}")]
+		public async Task<ActionResult<UserDTO>> GetUserById(int userId)
+		{
+			var user = await _userService.GetUserByIdAsync(userId);
+			if (user == null)
+			{
+				return NotFound();
+			}
+			return Ok(user);
+		}
+	}
 }

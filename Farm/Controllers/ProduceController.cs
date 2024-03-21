@@ -1,6 +1,7 @@
 ﻿using Farm.DTOS;
 using Farm.Modelss;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
@@ -9,10 +10,12 @@ using System.Collections.Generic;
 public class ProduceController : ControllerBase
 {
     private readonly IProduceService _produceService;
+    private readonly FarmContext _farmContext;
 
-    public ProduceController(IProduceService produceService)
+    public ProduceController(IProduceService produceService, FarmContext context)
     {
         _produceService = produceService;
+        _farmContext = context;
     }
 
     [HttpGet]
@@ -104,5 +107,18 @@ public class ProduceController : ControllerBase
         {
             return BadRequest($"Error: {ex.Message}");
         }
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetProduceName(int id)
+    {
+        var product = await _farmContext.Produces.FindAsync(id);
+
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(product);
     }
 }

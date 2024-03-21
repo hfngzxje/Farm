@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Farm.Service;
 using Farm.DTOS;
+using Farm.Modelss;
+using Farm.Service.IService;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -13,7 +15,84 @@ public class OrderController : ControllerBase
 		_orderService = orderService;
 	}
 
-	[HttpPost("PlaceOrder")]
+
+	[HttpGet]
+	public IActionResult GetAllOrder()
+	{
+		var orders = _orderService.GetAllOrder();
+		return Ok(orders);
+	}
+
+	[HttpGet("{userId}")]
+	public ActionResult<List<Order>> GetOrderByUserId(int userId)
+	{
+		var orders = _orderService.GetOrdersByUserId(userId);
+		if (orders == null)
+		{
+			return NotFound();
+		}
+		return orders;
+	}
+
+	//[HttpPut("{id}")]
+	//public IActionResult UpdateOrder(int id, [FromBody] OrderRequestDTO request)
+	//{
+	//	try
+	//	{
+	//		_orderService.UpdateOrder(id, request);
+	//		return Ok("Order updated successfully");
+	//	}
+	//	catch (ArgumentException ex)
+	//	{
+	//		return NotFound(ex.Message);
+	//	}
+	//	catch (Exception ex)
+	//	{
+	//		return StatusCode(500, ex.Message);
+	//	}
+	//}
+
+	[HttpDelete("delete/{id}")]
+	public IActionResult DeleteOrder(int id)
+	{
+		try
+		{
+			_orderService.DeleteOrder(id);
+			return Ok("Order deleted successfully");
+		}
+		catch (Exception ex)
+		{
+			return BadRequest($"Error: {ex.Message}");
+		}
+	}
+
+    [HttpGet("getBy/{id}")]
+    public IActionResult GetOrderById(int id)
+    {
+        try
+        {
+            var order = _orderService.GetOrderById(id);
+            return Ok(order);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error: {ex.Message}");
+        }
+    }
+
+    [HttpGet("GetAllOrderDetialsByOrderId/{id}")]
+    public IActionResult GetAllOrderDetialsByOrderId(int id)
+    {
+        var orderDetails = _orderService.GetAllOrderDetialsByOrderId(id);
+        if (orderDetails == null)
+        {
+            return NotFound();
+        }
+        return Ok(orderDetails);
+    }
+
+
+    [HttpPost("PlaceOrder")]
 	public IActionResult PlaceOrder([FromBody] OrderRequestDTO orderRequest)
 	{
 		try

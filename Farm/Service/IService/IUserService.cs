@@ -10,6 +10,6 @@ namespace Farm.Service.IService
 
         void RegisterUser(RegisterRequestDTO registerRequest);
 
-
-    }
+		Task<UserDTO> GetUserByIdAsync(int userId);
+	}
 }

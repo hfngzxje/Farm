@@ -81,6 +81,21 @@ namespace Farm.Services
             _context.Users.Add(newUser);
             _context.SaveChanges();
         }
-    }
+
+
+		public async Task<UserDTO> GetUserByIdAsync(int userId)
+		{
+			var user = await _context.Users.FindAsync(userId);
+			if (user == null)
+			{
+				return null;
+			}
+			return new UserDTO
+			{
+				UserId = user.UserId,
+				UserName = user.Username,
+			};
+		}
+	}
 }
 
