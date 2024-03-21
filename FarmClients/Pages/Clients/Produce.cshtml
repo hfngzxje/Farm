@@ -152,8 +152,11 @@
                                     </div>
                                     <h3 class="harshal_text">${item.name}</h3>
                                     <h3 class="rate_text">$${item.price}</h3>
+                                    <h3 class="rate_text">
+                                         ${item.quantity < 1 ? 'Out of stock' : 'Quantity: ' + item.quantity}
+                                    </h3>
                                     <div class="read_bt_1">
-                                         <a href="#orderModel" class="orderModel" data-toggle="modal" onclick="checkLoginAndOpenModal(${item.produceId}, '${item.name}', ${item.price})">Order</a>
+                                                 <a href="#orderModel" class="orderModel" data-toggle="modal" onclick="checkLoginAndOpenModal(${item.produceId}, '${item.name}', ${item.price}, ${item.quantity})">Order</a>
                                     </div>
                                 </div>
                             `;
@@ -166,12 +169,15 @@
             }
         });
     }
-    function checkLoginAndOpenModal(productId, productName, productPrice) {
+    function checkLoginAndOpenModal(productId, productName, productPrice, productQuantity) {
         var userJson = sessionStorage.getItem('user');
         if (userJson && userJson.length > 0) {
             $('#productDetails').html(`
                     <h2>Product Name: ${productName}</h2>
                     <h2>Price: $${productPrice}</h2>
+                    <h2>
+                         ${productQuantity < 1 ? 'Out of stock' : 'Quantity: ' + productQuantity}
+                    </h2>
                 `);
             $('#productDetails').data('productId', productId); 
             $('#productDetails').data('productPrice', productPrice);
