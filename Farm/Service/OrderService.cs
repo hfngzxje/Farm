@@ -114,48 +114,27 @@ namespace Farm.Service
         }
 
 
-        //public void UpdateOrder(int id, OrderRequestDTO request)
-        //{
-        //	var order = _context.Orders.Find(id);
-        //	if (order == null)
-        //	{
-        //		throw new ArgumentException("Order not found");
-        //	}
+        public void UpdateOrder(int id, OrderUpdateRequestDTO request)
+        {
+            var order = _context.Orders.FirstOrDefault(o => o.OrderId == id);
 
-        //	order.UserId = request.UserID;
-        //	order.Status = request.Status;
+            if (order == null)
+            {
+                throw new ArgumentException($"Order with ID {id} not found.");
+            }
 
-        //	foreach (var orderDetailRequest in request.OrderDetails)
-        //	{
-        //		var orderDetail = order.OrderDetails.FirstOrDefault(od => od.ProduceId == orderDetailRequest.ProduceID);
-        //		if (orderDetail == null)
-        //		{
-        //			orderDetail = new OrderDetail();
-        //			order.OrderDetails.Add(orderDetail);
-        //		}
+            order.UserId = request.UserID;
+            order.OrderDate = request.OrderDate;
+            order.Status = request.Status;
 
-        //		orderDetail.ProduceId = orderDetailRequest.ProduceID;
-        //		orderDetail.Quantity = orderDetailRequest.Quantity;
-        //		orderDetail.TotalPrice = orderDetailRequest.Price;
-        //		orderDetail.Address = orderDetailRequest.Address;
-        //	}
-
-        //	// Remove order details that are not in the updated request
-        //	var orderDetailIdsToRemove = order.OrderDetails
-        //		.Where(od => !request.OrderDetails.Any(odr => odr.ProduceID == od.ProduceId))
-        //		.Select(od => od.ProduceId)
-        //		.ToList();
-
-        //	foreach (var idToRemove in orderDetailIdsToRemove)
-        //	{
-        //		var orderDetailToRemove = order.OrderDetails.FirstOrDefault(od => od.ProduceId == idToRemove);
-        //		if (orderDetailToRemove != null)
-        //		{
-        //			_context.OrderDetails.Remove(orderDetailToRemove);
-        //		}
-        //	}
-
-        //	_context.SaveChanges();
-        //}
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error updating order.", ex);
+            }
+        }
     }
 }

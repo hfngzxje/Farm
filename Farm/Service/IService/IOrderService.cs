@@ -9,8 +9,9 @@ namespace Farm.Service.IService
 
 		List<Order> GetAllOrder();
 		public List<Order> GetOrdersByUserId(int userId);
-		//void UpdateOrder(int id, OrderRequestDTO request);
-		void DeleteOrder(int id);
+        public void UpdateOrder(int id, OrderUpdateRequestDTO request);
+
+        void DeleteOrder(int id);
         Order GetOrderById(int id);
         public List<OrderDetail> GetAllOrderDetialsByOrderId(int orderId);
     }

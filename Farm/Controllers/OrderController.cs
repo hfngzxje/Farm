@@ -34,25 +34,25 @@ public class OrderController : ControllerBase
 		return orders;
 	}
 
-	//[HttpPut("{id}")]
-	//public IActionResult UpdateOrder(int id, [FromBody] OrderRequestDTO request)
-	//{
-	//	try
-	//	{
-	//		_orderService.UpdateOrder(id, request);
-	//		return Ok("Order updated successfully");
-	//	}
-	//	catch (ArgumentException ex)
-	//	{
-	//		return NotFound(ex.Message);
-	//	}
-	//	catch (Exception ex)
-	//	{
-	//		return StatusCode(500, ex.Message);
-	//	}
-	//}
+    [HttpPut("{id}")]
+    public IActionResult UpdateOrder(int id, [FromBody] OrderUpdateRequestDTO request)
+    {
+        try
+        {
+            _orderService.UpdateOrder(id, request);
+            return Ok("Order updated successfully");
+        }
+        catch (ArgumentException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, $"Internal server error: {e.Message}");
+        }
+    }
 
-	[HttpDelete("delete/{id}")]
+    [HttpDelete("delete/{id}")]
 	public IActionResult DeleteOrder(int id)
 	{
 		try
