@@ -1,6 +1,10 @@
 ﻿using Farm.DTOS;
 using Farm.Modelss;
 using Farm.Service.IService;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Xceed.Document.NET;
+using Xceed.Words.NET;
 
 namespace Farm.Service
 {
@@ -134,6 +138,103 @@ namespace Farm.Service
             catch (Exception ex)
             {
                 throw new Exception("Error updating order.", ex);
+            }
+        }
+
+        public async Task<byte[]> ExportOrderToPdf(int orderId)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null)           
+                return null;
+                          
+
+            var orderDetails = _context.OrderDetails.Where(od => od.OrderId == orderId).Include(x => x.Produce).ToList();
+            if (orderDetails == null || !orderDetails.Any())
+                return null;
+
+            using (var ms = new System.IO.MemoryStream())
+            {
+                using (var doc = DocX.Create(ms))
+                {
+                    var titleParagraph = doc.InsertParagraph("Invoice");
+                    titleParagraph.FontSize(24).Bold();
+                    titleParagraph.Alignment = Alignment.center;
+                    doc.InsertParagraph();
+                    doc.InsertParagraph($"Order ID: {order.OrderId}");
+                    doc.InsertParagraph($"Order Date: {order.OrderDate}");
+                    doc.InsertParagraph($"Status: {GetStatusText(order.Status)}");
+
+                    doc.InsertParagraph("Order Details:");
+                    foreach (var detail in orderDetails)
+                    {
+                        doc.InsertParagraph($"Product Name: {detail.Produce.Name}");
+                        doc.InsertParagraph($"Quantity: {detail.Quantity}");
+                        doc.InsertParagraph($"Total Price: ${detail.TotalPrice}");
+                        doc.InsertParagraph($"Address: {detail.Address}");
+                        doc.InsertParagraph();
+                    }
+
+                    doc.Save();
+                }
+                return ms.ToArray();
+            }
+        }
+
+        public async Task<byte[]> ExportOrderToWord(int orderId)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null)
+                return null;
+
+
+            var orderDetails = _context.OrderDetails.Where(od => od.OrderId == orderId).Include(x => x.Produce).ToList();
+            if (orderDetails == null || !orderDetails.Any())
+                return null;
+
+            using (var ms = new System.IO.MemoryStream())
+            {
+                using (var doc = DocX.Create(ms))
+                {
+                    var titleParagraph = doc.InsertParagraph("Invoice");
+                    titleParagraph.FontSize(24).Bold();
+                    titleParagraph.Alignment = Alignment.center;
+                    doc.InsertParagraph();
+                    doc.InsertParagraph($"Order ID: {order.OrderId}");
+                    doc.InsertParagraph($"Order Date: {order.OrderDate}");
+                    doc.InsertParagraph($"Status: {GetStatusText(order.Status)}");
+
+                    doc.InsertParagraph("Order Details:");
+                    foreach (var detail in orderDetails)
+                    {
+                        doc.InsertParagraph($"Product Name: {detail.Produce.Name}");
+                        doc.InsertParagraph($"Quantity: {detail.Quantity}");
+                        doc.InsertParagraph($"Total Price: ${detail.TotalPrice}");
+                        doc.InsertParagraph($"Address: {detail.Address}");
+                        doc.InsertParagraph();
+                    }
+
+                    doc.Save();
+                }
+                return ms.ToArray();
+            }
+        }
+
+        private string GetStatusText(int? status)
+        {
+            switch (status)
+            {
+                case 1:
+                    return "Pending";
+                case 2:
+                    return "Approved";
+                case 3:
+                    return "Delivering";
+                case 4:
+                    return "Received";
+                case 5:
+                    return "Cancel order";
+                default:
+                    return "Unknown";
             }
         }
     }

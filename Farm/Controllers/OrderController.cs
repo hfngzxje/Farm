@@ -109,4 +109,26 @@ public class OrderController : ControllerBase
 			return StatusCode(500, $"Internal server error: {ex.Message}");
 		}
 	}
+
+
+    [HttpGet("{orderId}/export/pdf")]
+    public async Task<IActionResult> ExportOrderToPdf(int orderId)
+    {
+        var pdfFile = await _orderService.ExportOrderToPdf(orderId);
+        if (pdfFile == null)
+            return NotFound();
+
+        return File(pdfFile, "application/pdf", "order.pdf");
+    }
+
+    [HttpGet("{orderId}/export/word")]
+    public async Task<IActionResult> ExportOrderToWord(int orderId)
+    {
+        var wordFile = await _orderService.ExportOrderToWord(orderId);
+        if (wordFile == null)
+            return NotFound();
+
+        return File(wordFile, "application/msword", "order.docx");
+    }
+
 }

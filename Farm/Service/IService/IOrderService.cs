@@ -14,5 +14,8 @@ namespace Farm.Service.IService
         void DeleteOrder(int id);
         Order GetOrderById(int id);
         public List<OrderDetail> GetAllOrderDetialsByOrderId(int orderId);
+
+        Task<byte[]> ExportOrderToPdf(int orderId);
+        Task<byte[]> ExportOrderToWord(int orderId);
     }
 }
