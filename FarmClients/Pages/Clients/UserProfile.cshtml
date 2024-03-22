@@ -1,0 +1,196 @@
+﻿@page
+@{
+    Layout = null;
+}
+@model FarmClients.Pages.Clients.UserProfileModel
+@{
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/css/style.css">
+</head>
+<body>
+
+    <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span> </span></div>
+            </div>
+            <div class="col-md-6 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="text-right">Profile Settings</h2>
+                    </div>
+                    <div class="row mt-3" id="userModel">
+                        <div class="mt-3 form-group" hidden>
+                            <label for="userId">User Id</label>
+                            <input type="number" class="form-control" id="userId">
+                        </div>
+                        <div class="mt-3 form-group">
+                            <label for="userName">User Name</label>
+                            <input type="text" class="form-control" id="userName">
+                        </div>
+                        <div class="mt-3 form-group">
+                            <label for="phoneNumber">Phone Number</label>
+                            <input type="number" class="form-control" id="phoneNumber">
+                        </div>
+                        <div class="mt-3 form-group">
+                            <label for="email">Email</label>
+                            <input type="text" class="form-control" id="email">
+                        </div>
+                        <div class="mt-3 form-group">
+                            <label for="password">Password</label>
+                            <input readonly type="password" class="form-control" id="password" value="************">
+                        </div>
+                    </div>
+                    <p style="color: red; text-align: center" id="mess"></p>
+                    <div class="mt-5 text-center">
+                        <button class="btn btn-primary profile-button" type="button">View Order</button>                       
+                        <button id="saveProfileBtn" class="btn btn-primary profile-button" type="button">Save Profile</button>
+                        <button class="btn btn-primary profile-button" type="button" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
+                        <button class="btn btn-primary profile-button" type="button" onclick="window.location.href='https://localhost:7155/Clients/Home'">Back to home</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="oldPassword">Old Password</label>
+                        <input type="password" class="form-control" id="oldPassword" placeholder="Enter your old password">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" class="form-control" id="newPassword" placeholder="Enter your new password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your new password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="savePasswordBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            getUserProfile();
+        });
+
+        function getUserProfile() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var userId = urlParams.get('id');
+
+            $.ajax({
+                url: 'https://localhost:7020/api/User/user-profile/' + userId,
+                type: 'GET',
+                success: function (data) {                  
+                    $('#userModel #userId').val(data.userId);
+                    $('#userModel #userName').val(data.username);
+                    $('#userModel #phoneNumber').val(data.phonenumber);
+                    $('#userModel #email').val(data.email);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+            $('#saveProfileBtn').click(function () {
+                var userId = $('#userId').val();
+                var username = $('#userName').val();
+                var email = $('#email').val();
+                var phonenumber = $('#phoneNumber').val();
+
+                var requestData = {
+                    UserId: userId,
+                    Username: username,
+                    Email: email,
+                    Phonenumber: phonenumber
+                };
+
+                $.ajax({
+                    url: 'https://localhost:7020/api/User/' + userId,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(requestData),
+                    success: function (response) {
+                        alert('Profile updated successfully.');
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Failed to update profile. Please try again later.');
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $('#savePasswordBtn').click(function () {
+                var oldPassword = $('#oldPassword').val();
+                var newPassword = $('#newPassword').val();
+                var confirmPassword = $('#confirmPassword').val();
+
+                if (newPassword !== confirmPassword) {
+                    alert("New password and confirm password do not match.");
+                    return;
+                }
+
+                var urlParams = new URLSearchParams(window.location.search);
+                var userId = urlParams.get('id');
+
+                $.ajax({
+                    url: 'https://localhost:7020/api/User/change-password/' + userId,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        oldPassword: oldPassword,
+                        newPassword: newPassword
+                    }),
+                    success: function (response) {
+                        alert('Password changed successfully.');
+                        $('#changePasswordModal').modal('hide'); 
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('Old password not match!!');
+                    }
+                });
+            });
+        });
+
+    </script>
+
+</body>
+</html>
+
+

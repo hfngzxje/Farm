@@ -58,7 +58,7 @@
                                     var userJson = sessionStorage.getItem('user');
                                     if (userJson) {
                                         var user = JSON.parse(userJson);
-                                        var welcomeMessage = '<a class="nav-link" href="#">Hello, ' + user.username + '!</a>';
+                                        var welcomeMessage = '<a class="nav-link" href="/Clients/UserProfile?id=' + user.userId + '">Hello, ' + user.username + '!</a>';
                                         var logoutButton = '<a class="nav-link" id="logoutButton" href="/Account/Logout" ">Logout</a>';
                                         $('.login_btn-container').html(welcomeMessage + logoutButton);
                                     } else {

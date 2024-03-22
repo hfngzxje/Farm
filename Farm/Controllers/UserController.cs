@@ -2,6 +2,8 @@
 using Farm.Modelss;
 using Farm.Service.IService;
 using Farm.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -9,21 +11,21 @@ using System.Collections.Generic;
 
 namespace Farm.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class UserController : ControllerBase
-	{
-		private readonly IUserService _userService;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
+    {
+        private readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-		private readonly FarmContext _context;
+        private readonly FarmContext _context;
 
-		public UserController(IUserService userService, IHttpContextAccessor httpContextAccessor, FarmContext context)
-		{
-			_userService = userService;
+        public UserController(IUserService userService, IHttpContextAccessor httpContextAccessor, FarmContext context)
+        {
+            _userService = userService;
             _httpContextAccessor = httpContextAccessor;
-			_context = context;
+            _context = context;
 
-		}
+        }
 
         [HttpPost("login")]
         public async Task<ActionResult> Login(LoginRequestDTO loginRequest)
@@ -88,7 +90,7 @@ namespace Farm.Controllers
                     }
                 }
 
-                return NotFound(); 
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -96,15 +98,65 @@ namespace Farm.Controllers
             }
         }
 
-		[HttpGet("{userId}")]
-		public async Task<ActionResult<UserDTO>> GetUserById(int userId)
-		{
-			var user = await _userService.GetUserByIdAsync(userId);
-			if (user == null)
-			{
-				return NotFound();
-			}
-			return Ok(user);
-		}
-	}
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<UserDTO>> GetUserById(int userId)
+        {
+            var user = await _userService.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+        [HttpGet("user-profile/{id}")]
+        public IActionResult GetUserProfile(int id)
+        {
+            var username = _context.Users.FirstOrDefault(x => x.UserId == id);
+            if (username == null)
+            {
+                return NotFound();
+            }
+            return Ok(username);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateProfile(int id, [FromBody] UpdateProfileDTO request)
+        {
+            try
+            {
+                _userService.UpdateProfile(id, request);
+                return Ok("Profile updated successfully.");
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpPost("change-password/{id}")]
+        public IActionResult ChangePassword(int id, ChangePasswordDTO model)
+        {
+            var user = _context.Users.FirstOrDefault(x => x.UserId == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            
+
+            if(user.Password != model.OldPassword)
+            {
+                return BadRequest("Old Password not match !");
+            }else if(user.Password == model.OldPassword)
+            {
+                user.Password = model.NewPassword;
+                _context.SaveChanges();
+            }
+            return Ok(user);
+        }
+    }
 }

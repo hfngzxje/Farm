@@ -96,6 +96,25 @@ namespace Farm.Services
 				UserName = user.Username,
 			};
 		}
-	}
+
+        public void UpdateProfile(int id, UpdateProfileDTO request)
+        {
+            var user = _context.Users.Find(id);
+
+            if (user == null)
+            {
+                throw new ArgumentException($"User with ID {id} not found.");
+            }
+
+            user.Username = request.Username;
+            user.Email = request.Email;
+            user.Phonenumber = request.Phonenumber;
+
+            _context.SaveChanges();
+        }
+    }
+
+
 }
+
 
