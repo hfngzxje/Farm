@@ -1,0 +1,284 @@
+﻿@page
+@{
+	Layout = null;
+}
+@model FarmClients.Pages.Clients.UserOrder
+@{
+}
+
+<script src="~/jsAD/jquery-3.3.1.slim.min.js"></script>
+<script src="~/jsAD/popper.min.js"></script>
+<script src="~/jsAD/bootstrap.min.js"></script>
+<script src="~/jsAD/jquery-3.3.1.min.js"></script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Your Title</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="~/css/style.css">
+</head>
+<body>
+
+	<div class="container rounded bg-white mt-5 mb-5">
+		<div class="row">
+			<div class="col-md-3 border-right">
+				<div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span> </span></div>
+			</div>
+			<div class="col-md-6 border-right">
+				<div class="p-3 py-5">
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<h1 class="text-right">My order</h1>
+					</div>
+					<table id="orderTable" class="table table-striped table-hover">
+						<thead>
+							<tr>
+								<th>Id</th>
+								<th>User Name</th>
+								<th>Order Date</th>
+								<th>Status</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+
+					</table>
+
+					<script>
+						$(document).ready(function () {
+							$(document).on("click", ".detailsModel", function () {
+								var orderId = $(this).data("order-id");
+								getOrder(orderId);
+								getAllOrderDetails(orderId);
+							});
+
+							fetch('https://localhost:7020/api/Order')
+								.then(response => response.json())
+								.then(data => {
+									data.forEach(order => {
+										fetch(`https://localhost:7020/api/User/` + order.userId)
+											.then(response => response.json())
+											.then(user => {
+												const userNameColumn = document.querySelector(`#orderTable tbody tr[data-order-id="${order.orderId}"] .user-name`);
+												if (userNameColumn) {
+													userNameColumn.textContent = user.userName;
+												}
+											})
+											.catch(error => console.error('There was a problem with the fetch operation:', error));
+										const row = `
+																				<tr data-order-id="${order.orderId}">
+																					<td>${order.orderId}</td>
+																					<td class="user-name"></td>
+																					<td>${formatDate(order.orderDate)}</td>
+																					<td>${getStatusText(order.status)}</td>
+																					<td>
+																						<a href="#" class="detailsModel" data-toggle="modal" data-target="#detailsModel" data-order-id="${order.orderId}">
+																							<i class="material-icons">View Details</i>
+																						</a>
+																					</td>
+																				</tr>`;
+										document.querySelector('#orderTable tbody').insertAdjacentHTML('beforeend', row);
+									});
+								})
+								.catch(error => console.error('There was a problem with the fetch operation:', error));
+						});
+
+						function formatDate(dateString) {
+							const date = new Date(dateString);
+							const year = date.getFullYear();
+							let month = (date.getMonth() + 1).toString().padStart(2, '0');
+							let day = date.getDate().toString().padStart(2, '0');
+							return `${year}-${month}-${day}`;
+						}
+
+						function getStatusText(status) {
+							switch (status) {
+								case 1:
+									return "<span class='status-yellow'>Pending</span>";
+								case 2:
+									return "<span class='status-green'>Approved</span>";
+								case 3:
+									return "<span class='status-blue'>Delivering</span>";
+								case 4:
+									return "<span class='status-green'>Received</span>";
+								case 5:
+									return "<span class='status-red'>Cancel order</span>";
+								default:
+									return "Unknown";
+							}
+						}
+					</script>
+				</div>
+				<button style="margin-left: 250px" class="btn btn-primary profile-button" type="button" onclick="window.location.href='https://localhost:7155/Clients/Home'">Back to home</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" id="detailsModel" role="dialog">
+
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title">My Order</h1>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table id="orderTable" class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Order Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                    <table id="orderDetailsTable" class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Order Id</th>
+                                <th>Produce Name</th>
+                                <th>Quantity</th>
+                                <th>Total Price</th>
+                                <th>Address</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary profile-button" type="button" onclick="window.location.href='https://localhost:7155/Clients/Home'">Cancel</button>
+                    <button type="button" class="btn btn-success" id="btnEdit">Print PDF</button>
+                    <button type="button" class="btn btn-success" id="btnEdit">Print Word</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            function getOrder(orderId) {
+                $.ajax({
+                    url: 'https://localhost:7020/api/Order/getBy/' + orderId,
+                    type: 'GET',
+                    success: function (response) {
+                        $('#orderTable tbody').append(`
+                                <tr>
+                                    <td>${response.orderId}</td>
+                                    <td>${formatDate(response.orderDate)}</td>
+                                    <td>${getStatusText(response.status)}</td>
+                                </tr>
+                            `);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+
+            function getAllOrderDetails(orderId) {
+                $.ajax({
+                    url: 'https://localhost:7020/api/Order/GetAllOrderDetialsByOrderId/' + orderId,
+                    type: 'GET',
+                    success: function (response) {
+                        $('#orderDetailsTable tbody').empty();
+
+                        if (response.length === 0) {
+                            $('#orderDetailsTable tbody').append(`
+                                    <tr>
+                                        <td colspan="6">No data available</td>
+                                    </tr>
+                                `);
+                        } else {
+                            response.forEach(function (orderDetails) {
+                                $('#orderDetailsTable tbody').append(`
+                                        <tr>
+                                            <td>${orderDetails.orderDetailId}</td>
+                                            <td>${orderDetails.orderId}</td>
+                                            <td id="productName_${orderDetails.produceId}">${orderDetails.produceId}</td>
+                                            <td>${orderDetails.quantity}</td>
+                                            <td>${orderDetails.totalPrice}</td>
+                                            <td>${orderDetails.address}</td>
+                                        </tr>
+                                    `);
+
+                                $.ajax({
+                                    url: 'https://localhost:7020/api/Produce/' + orderDetails.produceId,
+                                    type: 'GET',
+                                    success: function (produce) {
+                                        $(`#productName_${orderDetails.produceId}`).text(produce.name);
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error('Error:', error);
+                                    }
+                                });
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+
+            //format date
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                const year = date.getFullYear();
+                let month = (date.getMonth() + 1).toString().padStart(2, '0');
+                let day = date.getDate().toString().padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            //get status
+            function getStatusText(status) {
+                switch (status) {
+                    case 1:
+                        return "<span class='status-yellow'>Pending</span>";
+                    case 2:
+                        return "<span class='status-green'>Approved</span>";
+                    case 3:
+                        return
+                        "<span class='status-blue'>Delivering</span>";
+                    case 4:
+                        return "<span class='status-green'>Received</span>";
+                    case 5:
+                        return "<span class='status-red'>Cancel order</span>";
+                    default:
+                        return "Unknown";
+                }
+            };
+    
+        </script>
+
+
+
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $(".xp-menubar").on('click', function () {
+                    $("#sidebar").toggleClass('active');
+                    $("#content").toggleClass('active');
+                });
+
+                $('.xp-menubar,.body-overlay').on('click', function () {
+                    $("#sidebar,.body-overlay").toggleClass('show-nav');
+                });
+            });
+        </script>
+
+</body>
+</html>

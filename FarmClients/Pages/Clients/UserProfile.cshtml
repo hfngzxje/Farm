@@ -53,7 +53,7 @@
                     </div>
                     <p style="color: red; text-align: center" id="mess"></p>
                     <div class="mt-5 text-center">
-                        <button class="btn btn-primary profile-button" type="button">View Order</button>                       
+                        <button class="btn btn-primary profile-button" type="button" onclick="viewOrder()">View Order</button>
                         <button id="saveProfileBtn" class="btn btn-primary profile-button" type="button">Save Profile</button>
                         <button class="btn btn-primary profile-button" type="button" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
                         <button class="btn btn-primary profile-button" type="button" onclick="window.location.href='https://localhost:7155/Clients/Home'">Back to home</button>
@@ -187,6 +187,16 @@
                 });
             });
         });
+
+
+        function viewOrder() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var userId = urlParams.get('id');
+
+            var orderUrl = 'https://localhost:7155/Clients/UserOrder?userId=' + userId;
+
+            window.location.href = orderUrl;
+        }
 
     </script>
 
