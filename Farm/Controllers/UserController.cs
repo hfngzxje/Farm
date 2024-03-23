@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Net.Mail;
+using System.Text;
 
 namespace Farm.Controllers
 {
@@ -158,5 +160,79 @@ namespace Farm.Controllers
             }
             return Ok(user);
         }
+
+
+        [HttpPost("forgotPassword/{email}")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid model");
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            // Generate a random password
+            var newPassword = GenerateRandomPassword();
+
+
+            user.Password = newPassword;
+            _context.Entry(user).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return StatusCode(500, "Failed to update user's password");
+            }
+
+            try
+            {
+                var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    UseDefaultCredentials = false,
+                    Credentials = new System.Net.NetworkCredential("buiduchung300802@gmail.com", "szwl dfpp ozyz iaez"),
+                    Port = 587,
+                    EnableSsl = true
+                };
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("buiduchung300802@gmail.com"),
+                    Subject = "New Password",
+                    Body = $"Your new password is: {newPassword}",
+                    IsBodyHtml = true
+                };
+
+                mailMessage.To.Add(email);
+
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Failed to send email");
+            }
+
+            return Ok("New password sent to your email");
+        }
+
+        private string GenerateRandomPassword(int length = 8)
+        {
+            const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            var random = new Random();
+            var password = new StringBuilder();
+            for (int i = 0; i < length; i++)
+            {
+                password.Append(validChars[random.Next(validChars.Length)]);
+            }
+            return password.ToString();
+        }
+
     }
 }

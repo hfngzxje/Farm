@@ -40,6 +40,7 @@
 								<th>Order Date</th>
 								<th>Status</th>
 								<th>Action</th>
+								<th>Export</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -77,8 +78,12 @@
 																					<td>
 																						<a href="#" class="detailsModel" data-toggle="modal" data-target="#detailsModel" data-order-id="${order.orderId}">
 																							<i class="material-icons">View Details</i>
-																						</a>
+																						</a>                                                              
 																					</td>
+                                                                                    <td>
+                                                                                        <button type="button" class="btnPrintWord" data-order-id="${order.orderId}">Word</button>
+                                                                                        <button type="button" class="btnPrintPDF" data-order-id="${order.orderId}">PDF</button>
+                                                                                    </td>
 																				</tr>`;
 										document.querySelector('#orderTable tbody').insertAdjacentHTML('beforeend', row);
 									});
@@ -112,13 +117,12 @@
 						}
 					</script>
 				</div>
-				<button style="margin-left: 250px" class="btn btn-primary profile-button" type="button" onclick="window.location.href='https://localhost:7155/Clients/Home'">Back to home</button>
+				<button style="margin-left: 250px; margin-bottom:100px" class="btn btn-primary profile-button" type="button" onclick="window.location.href='https://localhost:7155/Clients/Home'">Back to home</button>
 			</div>
 		</div>
 	</div>
 
 	<div class="modal fade" tabindex="-1" id="detailsModel" role="dialog">
-
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -158,8 +162,6 @@
 
                 <div class="modal-footer">
                     <button class="btn btn-primary profile-button" type="button" onclick="window.location.href='https://localhost:7155/Clients/Home'">Cancel</button>
-                    <button type="button" class="btn btn-success" id="btnEdit">Print PDF</button>
-                    <button type="button" class="btn btn-success" id="btnEdit">Print Word</button>
                 </div>
             </div>
         </div>
@@ -210,6 +212,8 @@
                                             <td>${orderDetails.totalPrice}</td>
                                             <td>${orderDetails.address}</td>
                                         </tr>
+
+
                                     `);
 
                                 $.ajax({
@@ -258,7 +262,59 @@
                         return "Unknown";
                 }
             };
+
+
+        $(document).on("click", ".btnPrintWord", function () {
+            var orderId = $(this).data("order-id");
+
+            $.ajax({
+                url: 'https://localhost:7020/api/Order/' + orderId + '/export/word',
+                type: 'GET',
+                xhrFields: {
+                    responseType: 'blob' 
+                },
+                success: function (response) {
+                    var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }); 
+                    var url = window.URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'order.docx';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+        $(document).on("click", ".btnPrintPDF", function () {
+            var orderId = $(this).data("order-id");
+
+            $.ajax({
+                url: 'https://localhost:7020/api/Order/' + orderId + '/export/pdf',
+                type: 'GET',
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (response) {
+                    var blob = new Blob([response], { type: 'application/pdf' });
+                    var url = window.URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'order.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
     
+
         </script>
 
 

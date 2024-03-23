@@ -186,8 +186,11 @@ namespace Farm.Service
             if (order == null)
                 return null;
 
+            var orderDetails = _context.OrderDetails
+                                        .Where(od => od.OrderId == orderId)
+                                        .Include(x => x.Produce)
+                                        .ToList();
 
-            var orderDetails = _context.OrderDetails.Where(od => od.OrderId == orderId).Include(x => x.Produce).ToList();
             if (orderDetails == null || !orderDetails.Any())
                 return null;
 
@@ -206,9 +209,9 @@ namespace Farm.Service
                     doc.InsertParagraph("Order Details:");
                     foreach (var detail in orderDetails)
                     {
-                        doc.InsertParagraph($"Product Name: {detail.Produce.Name}");
+                        doc.InsertParagraph($"Product Name: {detail.Produce?.Name}");
                         doc.InsertParagraph($"Quantity: {detail.Quantity}");
-                        doc.InsertParagraph($"Total Price: ${detail.TotalPrice}");
+                        doc.InsertParagraph($"Total Price: ${detail.TotalPrice:N2}");
                         doc.InsertParagraph($"Address: {detail.Address}");
                         doc.InsertParagraph();
                     }
