@@ -3,6 +3,7 @@ using Farm.Modelss;
 using Farm.Service.IService;
 using Farm.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,9 @@ namespace Farm.Controllers
             }
 
             HttpContext.Session.SetString("Username", authenticatedUser.Username);
+            int roleId = authenticatedUser.RoleId ?? 0;
+            HttpContext.Session.SetInt32("RoleId", roleId);
+
 
 
             var user = await _userService.GetUserByUsernameAsync(authenticatedUser.Username);

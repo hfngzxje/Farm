@@ -511,6 +511,22 @@
                             return "Unknown";
                     }
                 }
+
+                var userJson = sessionStorage.getItem('user');
+                console.log(userJson);
+
+                if (!userJson) {
+                    window.location.href = '/AccessDenied';
+                } else {
+                    var userObj = JSON.parse(userJson);
+                    var userRole = userObj.roleId;
+                    console.log(userRole);
+
+                    if (userRole === 1) {
+                    } else {
+                        window.location.href = '/AccessDenied';
+                    }
+                }
         </script>
 </body>
 </html>
